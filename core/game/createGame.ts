@@ -7,20 +7,21 @@ import {
   type ShuffleFn,
   type WordsCollection,
 } from '@core/game/types'
-import { createWordCard } from '@core/game/word-card'
-import { wordsFromCollection } from '@core/game/word-from-collection'
+import { createWordCard } from '@core/game/wordCard'
+import { wordsFromCollection } from '@core/game/wordFromCollection'
 
-export function createGame(params: {
+export type CreateGameParams = {
   readonly id: string
   readonly collection: WordsCollection
   readonly config: GameConfig
   readonly randomInt: RandomIntFn
   readonly shuffle: ShuffleFn
-}): Game {
-  const words = wordsFromCollection(params.collection).slice(
-    0,
-    params.config.wordsPerGame,
-  )
+}
+
+export function createGame(params: CreateGameParams): Game {
+  const words = wordsFromCollection({
+    collection: params.collection,
+  }).slice(0, params.config.wordsPerGame)
   const remainingWords = [...words]
   const maxWrongAnswers = params.config.maxErrorsAllowed
 
@@ -44,7 +45,10 @@ export function createGame(params: {
     id: params.id,
     words,
     remainingWords,
-    currentCard: createWordCard(firstWord, params.shuffle),
+    currentCard: createWordCard({
+      word: firstWord,
+      shuffle: params.shuffle,
+    }),
     correctAnswers: 0,
     wrongAnswers: 0,
     maxWrongAnswers,

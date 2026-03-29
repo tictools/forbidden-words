@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { gameProgressFromGame } from '@core/game/game-progress'
+import { gameProgressFromGame } from '@core/game/gameProgress'
 import { ERROR_SEVERITY, GAME_RESULT, GAME_STATUS } from '@core/game/types'
 import type { Game, Word } from '@core/game/types'
 
@@ -34,7 +34,7 @@ describe('gameProgressFromGame', () => {
       maxWrongAnswers: 10,
     })
 
-    const progress = gameProgressFromGame(game)
+    const progress = gameProgressFromGame({ game })
 
     expect(progress.totalWords).toBe(3)
     expect(progress.answeredCorrectly).toBe(1)
@@ -46,12 +46,12 @@ describe('gameProgressFromGame', () => {
 
   it('clamps remaining errors at zero', () => {
     const game = baseGame({ wrongAnswers: 12, maxWrongAnswers: 10 })
-    expect(gameProgressFromGame(game).remainingErrors).toBe(0)
+    expect(gameProgressFromGame({ game }).remainingErrors).toBe(0)
   })
 
   it('uses zero progress when there are no words', () => {
     const game = baseGame({ words: [], remainingWords: [] })
-    const progress = gameProgressFromGame(game)
+    const progress = gameProgressFromGame({ game })
     expect(progress.totalWords).toBe(0)
     expect(progress.progressPercentage).toBe(0)
   })
@@ -63,6 +63,8 @@ describe('gameProgressFromGame', () => {
       result: GAME_RESULT.LOST,
       currentCard: null,
     })
-    expect(gameProgressFromGame(game).errorSeverity).toBe(ERROR_SEVERITY.RED)
+    expect(gameProgressFromGame({ game }).errorSeverity).toBe(
+      ERROR_SEVERITY.RED,
+    )
   })
 })

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import { errorSeverityFromWrongAnswers } from '@core/game/errorSeverity'
 import { ERROR_SEVERITY } from '@core/game/types'
-import { errorSeverityFromWrongAnswers } from '@core/game/error-severity'
 
 describe('errorSeverityFromWrongAnswers', () => {
   it.each([
@@ -15,10 +15,14 @@ describe('errorSeverityFromWrongAnswers', () => {
     [9, ERROR_SEVERITY.RED],
     [10, ERROR_SEVERITY.RED],
   ] as const)('maps %i errors to %s', (count, expected) => {
-    expect(errorSeverityFromWrongAnswers(count)).toBe(expected)
+    expect(errorSeverityFromWrongAnswers({ wrongAnswers: count })).toBe(
+      expected,
+    )
   })
 
   it('treats counts above max bar as red', () => {
-    expect(errorSeverityFromWrongAnswers(11)).toBe(ERROR_SEVERITY.RED)
+    expect(errorSeverityFromWrongAnswers({ wrongAnswers: 11 })).toBe(
+      ERROR_SEVERITY.RED,
+    )
   })
 })

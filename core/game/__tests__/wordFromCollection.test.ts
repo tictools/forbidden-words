@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { wordsFromCollection } from '@core/game/word-from-collection'
+import { wordsFromCollection } from '@core/game/wordFromCollection'
 
 describe('wordsFromCollection', () => {
   it('builds Word value objects from WordGroup tuples', () => {
@@ -9,7 +9,7 @@ describe('wordsFromCollection', () => {
       ['hi ha', 'hiha', 'i a'],
     ] as const
 
-    const words = wordsFromCollection(collection)
+    const words = wordsFromCollection({ collection })
 
     expect(words).toHaveLength(2)
     expect(words[0]).toEqual({

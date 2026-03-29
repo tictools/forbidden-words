@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { createGame } from '@core/game/create-game'
+import { createGame } from '@core/game/createGame'
 import { GAME_RESULT, GAME_STATUS } from '@core/game/types'
 import type { GameConfig, ShuffleFn, WordsCollection } from '@core/game/types'
 

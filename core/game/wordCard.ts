@@ -1,6 +1,14 @@
 import type { ShuffleFn, Word, WordCard } from '@core/game/types'
 
-export function createWordCard(word: Word, shuffle: ShuffleFn): WordCard {
+export type CreateWordCardParams = {
+  readonly word: Word
+  readonly shuffle: ShuffleFn
+}
+
+export function createWordCard({
+  word,
+  shuffle,
+}: CreateWordCardParams): WordCard {
   const options: string[] = [
     word.correctOption,
     word.wrongOptions[0],

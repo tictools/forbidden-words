@@ -7,7 +7,7 @@ describe('createShuffle', () => {
     let i = 0
     const planned = [0, 0, 0]
     const randomInt = (maxExclusive: number) => planned[i++]! % maxExclusive
-    const shuffle = createShuffle(randomInt)
+    const shuffle = createShuffle({ randomInt })
 
     const out = shuffle(['a', 'b', 'c'])
 

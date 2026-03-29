@@ -1,7 +1,13 @@
-import { errorSeverityFromWrongAnswers } from '@core/game/error-severity'
+import { errorSeverityFromWrongAnswers } from '@core/game/errorSeverity'
 import type { Game, GameProgress } from '@core/game/types'
 
-export function gameProgressFromGame(game: Game): GameProgress {
+export type GameProgressFromGameParams = {
+  readonly game: Game
+}
+
+export function gameProgressFromGame({
+  game,
+}: GameProgressFromGameParams): GameProgress {
   const totalWords = game.words.length
   const answeredCorrectly = game.correctAnswers
   const errorsCommitted = game.wrongAnswers
@@ -15,6 +21,6 @@ export function gameProgressFromGame(game: Game): GameProgress {
     errorsCommitted,
     remainingErrors,
     progressPercentage,
-    errorSeverity: errorSeverityFromWrongAnswers(errorsCommitted),
+    errorSeverity: errorSeverityFromWrongAnswers({ wrongAnswers: errorsCommitted }),
   }
 }
