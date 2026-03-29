@@ -1,0 +1,96 @@
+---
+description: Atomic Design conventions for UI components
+globs: app/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Atomic Design (UI)
+
+## Structure
+Organize UI as Atomic Design: atoms/molecules/organisms/templates/pages
+- Place components in smallest appropriate level
+- Don't skip levels without reason
+- Favor composition over inheritance
+
+## HTML Elements Rule (STRICT)
+
+**Native HTML elements can ONLY be defined in atoms. Period.**
+
+### Forbidden elements in molecules/organisms/templates
+The following elements **MUST NOT** appear directly in molecules, organisms, or templates:
+- Container elements: `div`, `span`, `section`, `article`, `aside`, `header`, `footer`, `nav`, `main`
+- Form elements: `form`, `input`, `textarea`, `select`, `label`, `fieldset`
+- Text elements: `p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `span`, `strong`, `em`
+- List elements: `ul`, `ol`, `li`, `dl`, `dt`, `dd`
+- Table elements: `table`, `tr`, `td`, `th`, `thead`, `tbody`
+- Media elements: `img`, `video`, `audio`, `canvas`
+- Interactive elements: `button`, `a`, `details`, `summary`
+
+### What to do instead
+If you need any of these elements in a molecule/organism/template, you **MUST**:
+1. Create an atom that wraps the HTML element
+2. Use that atom in your component
+
+### Examples
+
+**❌ WRONG - HTML elements in molecule:**
+```tsx
+// app/components/molecules/SearchBar.tsx
+export const SearchBar = () => {
+  return (
+    <div>  // ❌ NEVER use div in molecules
+      <input type="text" />  // ❌ NEVER use input in molecules
+      <button>Search</button>  // ❌ NEVER use button in molecules
+    </div>
+  );
+};
+```
+
+**✅ CORRECT - Using atoms:**
+```tsx
+// app/components/atoms/Box.tsx
+export const Box = ({ children }: { children: React.ReactNode }) => {
+  return <div>{children}</div>;  // ✅ HTML element in atom
+};
+
+// app/components/atoms/Input.tsx
+export const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
+  return <input {...props} />;  // ✅ HTML element in atom
+};
+
+// app/components/atoms/Button.tsx
+export const Button = ({ children }: { children: React.ReactNode }) => {
+  return <button>{children}</button>;  // ✅ HTML element in atom
+};
+
+// app/components/molecules/SearchBar.tsx
+import { Box } from "../atoms/Box";
+import { Input } from "../atoms/Input";
+import { Button } from "../atoms/Button";
+
+export const SearchBar = () => {
+  return (
+    <Box>  // ✅ Using atom
+      <Input type="text" />  // ✅ Using atom
+      <Button>Search</Button>  // ✅ Using atom
+    </Box>
+  );
+};
+```
+
+## Testing
+- New UI components should have tests covering behavior
+- Use Vitest + React Testing Library
+- Test via user-visible output and interactions, not implementation details
+
+## Verification Commands
+```bash
+# Check for HTML elements in molecules (should return nothing)
+grep -r "<div\|<span\|<input\|<button\|<p\|<h[1-6]" app/components/molecules/ --include="*.tsx"
+
+# Check for HTML elements in organisms (should return nothing)
+grep -r "<div\|<span\|<input\|<button\|<p\|<h[1-6]" app/components/organisms/ --include="*.tsx"
+
+# Check atoms (should find HTML elements)
+grep -r "<div\|<span\|<input\|<button\|<p\|<h[1-6]" app/components/atoms/ --include="*.tsx"
+```

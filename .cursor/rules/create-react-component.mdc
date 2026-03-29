@@ -1,0 +1,170 @@
+---
+description: React component creation conventions
+globs: app/**/*.{tsx,ts}
+alwaysApply: false
+---
+
+# Create React Component
+
+When creating or refactoring React components:
+
+## Component Structure
+- Use arrow function components, NEVER `export default` (named exports only)
+- Props type: `type ComponentNameProps = { ... }` (e.g., `ButtonProps`)
+- Prefer early returns for loading/empty/error states
+- Keep components UI-first, extract business logic to `use<Feature>` hooks
+- **Directory Structure (REQUIRED)**: Every component MUST have its own directory:
+  ```
+  ComponentName/
+    __tests__/
+      ComponentName.test.tsx
+    __mocks__/
+      [mock files if needed]
+    ComponentName.tsx
+  ```
+
+## Path Aliases (REQUIRED)
+**ALL imports MUST use path aliases. NEVER use relative imports.**
+
+### Available Aliases
+- `@/*` → `./src/*`
+- `@/components/*` → `./src/components/*`
+- `@/atoms/*` → `./src/components/atoms/*`
+- `@/molecules/*` → `./src/components/molecules/*`
+- `@/data/*` → `./src/data/*`
+- `@/assets/*` → `./src/assets/*`
+
+### Examples
+❌ **INCORRECT** (relative imports):
+```tsx
+import { Box } from "../atoms/Box/Box";
+import { Hero } from "./Hero/Hero";
+import { demoData } from "../../data";
+```
+
+✅ **CORRECT** (alias imports):
+```tsx
+import { Box } from "@/atoms/Box/Box";
+import { Hero } from "@/molecules/Hero/Hero";
+import { demoData } from "@/data";
+```
+
+### Import Rules
+- Components: `@/atoms/ComponentName/ComponentName` or `@/molecules/ComponentName/ComponentName`
+- Data: `@/data` or `@/data/specific-file`
+- Assets: `@/assets/images/logo.png`
+- NEVER use `../` or `./` except within the same component directory
+
+## Patterns
+- Presentational: typed props, minimal logic
+- Data components: early returns + extracted hook + actions object
+- Before memoization/optimization, check vercel-react-best-practices
+
+## Templates
+
+```tsx
+// Presentational
+export type ButtonProps = {
+  label: string;
+  onClick: () => void;
+  isDisabled?: boolean;
+};
+
+export const Button = ({ label, onClick, isDisabled = false }: ButtonProps) => {
+  return (
+    <button type="button" onClick={onClick} disabled={isDisabled}>
+      {label}
+    </button>
+  );
+};
+```
+
+```tsx
+// With hook and early returns
+export const UsersList = ({ query }: { query: string }) => {
+  const { state, actions } = useUsersList({ query });
+
+  if (state.isLoading) return <div>Loading…</div>;
+  if (state.error) return <div role="alert">Something went wrong</div>;
+  if (state.users.length === 0) return <div>No results</div>;
+
+  return (
+    <ul>
+      {state.users.map((user) => (
+        <li key={user.id}>
+          <button type="button" onClick={() => actions.selectUser(user.id)}>
+            {user.name}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+```
+
+## Testing
+Stack: Vitest + React Testing Library + MSW
+- Test behavior via user-visible output, not implementation details
+- For hooks: prefer testing through component using it
+- Use `renderHook` only for "pure-ish" hooks (mostly state transitions)
+
+## Testing Best Practices (REQUIRED)
+
+### Data Test ID Conventions
+**CRITICAL**: `data-testid` is ONLY for testing, NEVER for client logic or production code.
+
+#### Rules
+- ✅ **Allowed**: In test selectors (`screen.getByTestId()`)
+- ❌ **Forbidden**: CSS selectors, client logic, querySelector, refs, getAttribute()
+
+#### Preferred Alternatives (before using data-testid)
+Try these first:
+1. `screen.getByRole()` - For interactive elements (button, heading, link)
+2. `screen.getByText()` - For visible text
+3. `screen.getByLabelText()` - For inputs with labels
+4. `screen.getByPlaceholderText()` - For inputs with placeholder
+
+#### Example ❌ INCORRECT
+```tsx
+// CSS - NEVER do this
+[data-testid="submit"] { color: red; }
+
+// Client logic - NEVER do this
+const el = document.querySelector('[data-testid="submit"]');
+const id = element.getAttribute('data-testid');
+```
+
+#### Example ✅ CORRECT
+```tsx
+// Component
+<button aria-label="Submit form">Submit</button>
+
+// Test
+screen.getByRole('button', { name: /submit/i });
+```
+
+#### Configuration Required
+- **ESLint**: Block data-testid outside tests
+- **Babel**: Strip data-testid from production build
+- **Verify**: `npm run verify:no-testid` to check build
+
+### Test File Structure
+```tsx
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import { Button } from './Button';
+
+describe('Button', () => {
+  it('calls onClick when clicked', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    
+    render(<Button onClick={onClick}>Click me</Button>);
+    
+    await user.click(screen.getByRole('button', { name: /click me/i }));
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+});
+```

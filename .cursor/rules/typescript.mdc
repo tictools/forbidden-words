@@ -1,0 +1,84 @@
+---
+description: TypeScript strict patterns and best practices
+globs: app/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# TypeScript
+
+## Const Types Pattern (REQUIRED)
+```typescript
+// ✅ ALWAYS: Create const object first, then extract type
+const STATUS = {
+  ACTIVE: "active",
+  INACTIVE: "inactive",
+  PENDING: "pending",
+} as const;
+
+type Status = (typeof STATUS)[keyof typeof STATUS];
+
+// ❌ NEVER: Direct union types
+type Status = "active" | "inactive" | "pending";
+```
+
+## Flat Interfaces (REQUIRED)
+```typescript
+// ✅ ALWAYS: One level depth
+interface UserAddress {
+  street: string;
+  city: string;
+}
+
+interface User {
+  id: string;
+  name: string;
+  address: UserAddress;
+}
+
+// ❌ NEVER: Inline nested objects
+interface User {
+  address: { street: string; city: string };
+}
+```
+
+## Never Use `any`
+```typescript
+// ✅ Use unknown
+declare const input: unknown;
+
+// ✅ Use generics
+function first<T>(arr: T[]): T | undefined;
+
+// ❌ NEVER
+function parse(input: any): any;
+```
+
+## Utility Types
+```typescript
+Pick<User, "id" | "name">     // Select fields
+Omit<User, "id">              // Exclude fields
+Partial<User>                 // All optional
+Required<User>                // All required
+Readonly<User>                // All readonly
+Record<string, User>          // Object type
+ReturnType<typeof fn>         // Function return type
+Parameters<typeof fn>         // Function params tuple
+```
+
+## Type Guards
+```typescript
+function isUser(value: unknown): value is User {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    "name" in value
+  );
+}
+```
+
+## Import Types
+```typescript
+import type { User } from "./types";
+import { createUser, type Config } from "./utils";
+```
