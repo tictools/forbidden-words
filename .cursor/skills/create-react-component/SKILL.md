@@ -24,13 +24,12 @@ metadata:
 
 ## Path Aliases (REQUIRED)
 
-- Use aliases, never relative imports across feature boundaries:
-  - `@/*` -> `src/*`
-  - `@/components/*` -> `src/components/*`
-  - `@/atoms/*` -> `src/components/atoms/*`
-  - `@/molecules/*` -> `src/components/molecules/*`
-  - `@/data/*` -> `src/data/*`
-  - `@/assets/*` -> `src/assets/*`
+- Use the **project’s** configured aliases (see `vite.config.ts` / `tsconfig.json`); never rely on deep `../../../` across feature boundaries.
+- **This repository** maps:
+  - `@app/*` → `app/*`
+  - `@core/*` → `core/*`
+  - `@tests/*` → `tests/*`
+- Other codebases may use a `src/` tree with `@/*` or `@/components/*`, etc.—always align imports with the active config.
 
 ## Testing (REQUIRED)
 

@@ -9,4 +9,5 @@ description: Enforce Red -> Green -> Refactor for all changes
 - Write/adjust the test first (or alongside the change if refactoring requires safety net).
 - Keep increments small; prefer the simplest implementation that makes the test pass.
 - Refactor only after green; keep behavior unchanged during refactors.
-- For **domain** (`/core`), add or change specs under **`/core/<module>/__tests__/`** (not under `/tests`); use `/tests` only for setup, mocks, and mothers. Import **concrete modules** only—**no barrels** in `/app`, `/core`, or `/tests` (see `project-structure` and `tests-mothers-and-mocks`).
+- During refactor, **lower cyclomatic complexity**: extract pure helpers or modules when a function accumulates branches; add or adjust tests for the new units so behavior stays pinned.
+- For **domain** (`/core`), add or change specs under **`/core/<module>/__tests__/`** (not under `/tests`); use `/tests` only for setup, mocks, and mothers. Import **concrete modules** only—**no barrels** in `/app`, `/core`, or `/tests` (see `project-structure` and `tests-mothers-and-mocks`). Use **camelCase** module filenames for multi-word files (see `project-structure`).

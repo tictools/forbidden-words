@@ -6,7 +6,7 @@ description: /tests holds config, mocks, and mothers only; core specs in __tests
 # Tests: mothers and mocks
 
 - The **`/tests` directory** is for **global test config** (e.g. RTL/jest-dom setup for Vitest), **reusable mocks/fakes**, and **mother objects/builders**. It must **not** contain `*.test.ts` / `*.spec.ts` files that exercise domain code in `/core`.
-- **Domain specs** live under **`/core/<module>/__tests__/`** next to the module (see `project-structure`). Test imports must target **concrete modules** (e.g. `@core/.../file`); follow the **repo-wide no-barrel** rule.
+- **Domain specs** live under **`/core/<module>/__tests__/`** next to the module (see `project-structure`). Test imports must target **concrete modules** (e.g. `@core/game/createGame`); follow the **repo-wide no-barrel** rule and **camelCase** filenames for multi-word modules.
 - Use **mother objects/builders** for reusable domain test data (especially entities/value objects).
 - Provide explicit mocks/fakes for hook dependencies (e.g. API clients, storage, time).
 
