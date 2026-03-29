@@ -18,6 +18,7 @@ metadata:
   - `ComponentName/ComponentName.tsx`
   - `ComponentName/__tests__/ComponentName.test.tsx`
   - `ComponentName/__mocks__/` when needed.
+- **No** `ComponentName/index.ts` barrel: importers reference `ComponentName/ComponentName` explicitly (repo-wide rule; see `project-structure`).
 - Prefer early returns for loading/error/empty states.
 - Keep UI components thin and extract business logic to `use<Feature>` hooks.
 

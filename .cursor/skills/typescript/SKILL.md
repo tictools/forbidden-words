@@ -40,3 +40,4 @@ Use built-in helpers (`Pick`, `Omit`, `Partial`, `Required`, `Readonly`, `Record
 ## Imports
 
 Use `import type` for type-only imports.
+- Import from the **concrete module** that defines the symbol. **No barrel `index.ts` / `index.tsx`** in **`/app`**, **`/core`**, or **`/tests`**—use explicit paths (e.g. `@core/<feature>/<file>`, `@app/<feature>/<Component>/<Component>.tsx`; see `project-structure`).
