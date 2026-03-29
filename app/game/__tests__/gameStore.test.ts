@@ -1,11 +1,12 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest'
 
-import { createGameStore, selectGameBarSelectors } from "@app/game/gameStore";
-import type { GameConfig } from "@core/Game/GameConfig";
-import { GAME_RESULT, GAME_STATUS } from "@core/Game/gameConstants";
-import { ERROR_SEVERITY } from "@core/Severity/severityConstants";
-import type { ShuffleFn } from "@core/shared/randomTypes";
-import type { WordsCollection } from "@core/Word/Word";
+import { createGameStore } from '@app/game/gameStore'
+import type { GameConfig } from '@core/Game/GameConfig'
+import { GAME_RESULT, GAME_STATUS } from '@core/Game/gameConstants'
+import { gameBarMetricsFromGame } from '@core/GameProgress/logic/gameBarMetricsFromGame'
+import { ERROR_SEVERITY } from '@core/Severity/severityConstants'
+import type { ShuffleFn } from '@core/shared/randomTypes'
+import type { WordsCollection } from '@core/Word/Word'
 
 const collection: WordsCollection = [
   ["perquè", "perque", "perqè"],
@@ -17,8 +18,8 @@ const identityShuffle: ShuffleFn = (items) => [...items];
 
 const defaultConfig: GameConfig = { maxErrorsAllowed: 10, wordsPerGame: 3 };
 
-describe("createGameStore", () => {
-  it("startGame delegates to createGame and exposes bar selectors", () => {
+describe('createGameStore', () => {
+  it('startGame delegates to createGame; bar metrics come from domain', () => {
     const useGameStore = createGameStore({
       randomInt: () => 0,
       shuffle: identityShuffle,
@@ -36,7 +37,7 @@ describe("createGameStore", () => {
     expect(game!.correctAnswers).toBe(0);
     expect(game!.wrongAnswers).toBe(0);
 
-    const bars = selectGameBarSelectors(game);
+    const bars = gameBarMetricsFromGame({ game })
     expect(bars).toEqual({
       answeredCorrectly: 0,
       totalWords: 3,
@@ -46,7 +47,7 @@ describe("createGameStore", () => {
     });
   });
 
-  it("submitOption delegates to submitAnswer and updates game state", () => {
+  it('submitOption delegates to submitAnswer and updates game state', () => {
     const useGameStore = createGameStore({
       randomInt: () => 0,
       shuffle: identityShuffle,
@@ -65,7 +66,7 @@ describe("createGameStore", () => {
     expect(game!.remainingWords).toHaveLength(2);
     expect(game!.status).toBe(GAME_STATUS.ACTIVE);
 
-    const bars = selectGameBarSelectors(game);
+    const bars = gameBarMetricsFromGame({ game })
     expect(bars?.answeredCorrectly).toBe(1);
     expect(bars?.wrongAnswers).toBe(0);
     expect(bars?.errorSeverity).toBe(ERROR_SEVERITY.GREEN);
@@ -94,7 +95,7 @@ describe("createGameStore", () => {
     expect(game!.wrongAnswers).toBe(0);
     expect(game!.correctAnswers).toBe(0);
     expect(game!.status).toBe(GAME_STATUS.ACTIVE);
-    expect(selectGameBarSelectors(game)?.wrongAnswers).toBe(0);
+    expect(gameBarMetricsFromGame({ game })?.wrongAnswers).toBe(0)
   });
 
   it("submitOption is a no-op when there is no active game", () => {
@@ -119,7 +120,7 @@ describe("createGameStore", () => {
     expect(useGameStore.getState().game).toBeNull();
   });
 
-  it("reflects finished game and severity from wrong answers via selectors", () => {
+  it('reflects finished game and severity via gameBarMetricsFromGame', () => {
     const useGameStore = createGameStore({
       randomInt: () => 0,
       shuffle: identityShuffle,
@@ -139,7 +140,7 @@ describe("createGameStore", () => {
     expect(game!.status).toBe(GAME_STATUS.FINISHED);
     expect(game!.result).toBe(GAME_RESULT.LOST);
 
-    const bars = selectGameBarSelectors(game);
+    const bars = gameBarMetricsFromGame({ game })
     expect(bars?.wrongAnswers).toBe(3);
     expect(bars?.maxWrongAnswers).toBe(10);
     expect(bars?.errorSeverity).toBe(ERROR_SEVERITY.YELLOW);
