@@ -143,27 +143,6 @@ In this initial phase, the following are NOT included:
 
 The verbal reproduction of words is performed using the **Web Speech API** (`SpeechSynthesis`).
 
-### Implementation
-
-```typescript
-// Custom hook for speech synthesis
-const useSpeechSynthesis = () => {
-  const speak = (text: string) => {
-    if (!window.speechSynthesis) {
-      console.warn('Web Speech API not available');
-      return;
-    }
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ca-ES'; // Català
-    utterance.rate = 0.9; // Velocitat lleugerament més lenta
-    window.speechSynthesis.speak(utterance);
-  };
-
-  return { speak };
-};
-```
-
 ### Considerations
 
 - **Compatibility**: Check `window.speechSynthesis` before using
