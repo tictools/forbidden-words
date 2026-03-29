@@ -18,9 +18,9 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["app/*"],
-      "@core/*": ["core/*"],
-      "@tests/*": ["tests/*"]
+      "@app/*": ["./app/*"],
+      "@core/*": ["./core/*"],
+      "@tests/*": ["./tests/*"]
     },
     "types": ["vite/client", "node"]
   },
