@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 
+import type { AnswerEffect } from '@core/Answer/Answer'
 import type { Game } from '@core/Game/Game'
 import type { GameConfig } from '@core/Game/GameConfig'
 import { createGame } from '@core/Game/logic/createGame'
@@ -20,6 +21,8 @@ export type GameStoreDeps = {
 
 export type GameStoreState = {
   readonly game: Game | null
+  /** Last submit result for UI (confetti, error copy); cleared on start / reset. */
+  readonly lastAnswerEffect: AnswerEffect | null
 }
 
 export type GameStoreActions = {
@@ -33,10 +36,12 @@ export function createGameStore(deps: GameStoreDeps) {
 
   return create<GameStoreState & GameStoreActions>((set, get) => ({
     game: null,
+    lastAnswerEffect: null,
 
     startGame: (params) => {
       lastSession = params
       set({
+        lastAnswerEffect: null,
         game: createGame({
           id: params.id,
           collection: params.collection,
@@ -51,19 +56,20 @@ export function createGameStore(deps: GameStoreDeps) {
       const { game } = get()
       if (!game) return
 
-      const { game: nextGame } = submitAnswer({
+      const { game: nextGame, effect } = submitAnswer({
         game,
         selectedOption,
         randomInt: deps.randomInt,
         shuffle: deps.shuffle,
       })
-      set({ game: nextGame })
+      set({ game: nextGame, lastAnswerEffect: effect })
     },
 
     reset: () => {
       if (!lastSession) return
 
       set({
+        lastAnswerEffect: null,
         game: createGame({
           id: lastSession.id,
           collection: lastSession.collection,

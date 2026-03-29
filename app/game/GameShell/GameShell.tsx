@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import JSConfetti from 'js-confetti'
+import { useEffect, useMemo } from 'react'
 
 import { DEFAULT_SESSION_ID, GAME_CONFIG } from '@app/game/GameShell/data/gameDefaults'
 import { WORDS_COLLECTION } from '@app/game/GameShell/data/wordsCollection'
@@ -14,12 +15,20 @@ import { RenderOrNull } from '@app/ui/atoms/RenderOrNull/RenderOrNull'
 import { Section } from '@app/ui/atoms/Section/Section'
 import { Text } from '@app/ui/atoms/Text/Text'
 import { GameProgressBars } from '@app/ui/molecules/GameProgressBars/GameProgressBars'
+import { GameWordCard } from '@app/ui/molecules/GameWordCard/GameWordCard'
+import type { AnswerEffect } from '@core/Answer/Answer'
+import { ANSWER_EFFECT } from '@core/Answer/answerConstants'
+import type { Game } from '@core/Game/Game'
+import { GAME_STATUS } from '@core/Game/gameConstants'
 import type { GameBarMetrics } from '@core/GameProgress/GameBarMetrics'
 
 export type GameShellViewProps = {
   readonly speech: UseSpeechGateResult
   readonly displayMetrics: GameBarMetrics
   readonly hasActiveGame: boolean
+  readonly game: Game | null
+  readonly lastAnswerEffect: AnswerEffect | null
+  readonly onSelectOption: (option: string) => void
   readonly onStartGame?: () => void
 }
 
@@ -27,8 +36,16 @@ export const GameShellView = ({
   speech,
   displayMetrics,
   hasActiveGame,
+  game,
+  lastAnswerEffect,
+  onSelectOption,
   onStartGame,
 }: GameShellViewProps) => {
+  const activeCard =
+    hasActiveGame && game?.status === GAME_STATUS.ACTIVE
+      ? game.currentCard
+      : null
+
   if (speech.status === 'blocked') {
     return (
       <Main className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 text-emerald-50">
@@ -85,10 +102,12 @@ export const GameShellView = ({
                 </Box>
               </RenderOrNull>
             </RenderOrNull>
-            <RenderOrNull shouldRender={hasActiveGame}>
-              <Text className="text-center text-sm text-emerald-200/90">
-                La targeta de joc es mostrarà aquí.
-              </Text>
+            <RenderOrNull shouldRender={activeCard !== null}>
+              <GameWordCard
+                card={activeCard!}
+                lastAnswerEffect={lastAnswerEffect}
+                onSelectOption={onSelectOption}
+              />
             </RenderOrNull>
           </Section>
         </Section>
@@ -100,7 +119,9 @@ export const GameShellView = ({
 export const GameShell = () => {
   const speech = useSpeechGate()
   const game = useGameStore((s) => s.game)
+  const lastAnswerEffect = useGameStore((s) => s.lastAnswerEffect)
   const startGame = useGameStore((s) => s.startGame)
+  const submitOption = useGameStore((s) => s.submitOption)
 
   const displayMetrics = useMemo(
     () => displayGameBarMetrics({ game, defaultConfig: GAME_CONFIG }),
@@ -115,11 +136,20 @@ export const GameShell = () => {
     })
   }
 
+  useEffect(() => {
+    if (lastAnswerEffect?.kind !== ANSWER_EFFECT.CORRECT) return
+    const confetti = new JSConfetti()
+    void confetti.addConfetti()
+  }, [lastAnswerEffect])
+
   return (
     <GameShellView
       speech={speech}
       displayMetrics={displayMetrics}
       hasActiveGame={game !== null}
+      game={game}
+      lastAnswerEffect={lastAnswerEffect}
+      onSelectOption={submitOption}
       onStartGame={onStartGame}
     />
   )

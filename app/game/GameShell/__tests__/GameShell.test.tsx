@@ -1,7 +1,15 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { useSpeechGate } from '@app/speech/useSpeechGate'
+
+const mockAddConfetti = vi.fn()
+
+vi.mock('js-confetti', () => ({
+  default: class {
+    addConfetti = mockAddConfetti
+  },
+}))
 
 vi.mock('@app/speech/useSpeechGate', () => ({
   useSpeechGate: vi.fn(),
@@ -29,6 +37,9 @@ describe('GameShellView', () => {
         speech={{ status: 'blocked', message: 'Missatge de bloqueig de prova.' }}
         displayMetrics={baseMetrics}
         hasActiveGame={false}
+        game={null}
+        lastAnswerEffect={null}
+        onSelectOption={vi.fn()}
       />,
     )
 
@@ -43,6 +54,9 @@ describe('GameShellView', () => {
         speech={{ status: 'ready' }}
         displayMetrics={baseMetrics}
         hasActiveGame={false}
+        game={null}
+        lastAnswerEffect={null}
+        onSelectOption={vi.fn()}
       />,
     )
 
@@ -66,6 +80,9 @@ describe('GameShellView', () => {
         speech={{ status: 'ready' }}
         displayMetrics={baseMetrics}
         hasActiveGame={false}
+        game={null}
+        lastAnswerEffect={null}
+        onSelectOption={vi.fn()}
       />,
     )
 
@@ -80,6 +97,9 @@ describe('GameShellView', () => {
         speech={{ status: 'ready' }}
         displayMetrics={baseMetrics}
         hasActiveGame={false}
+        game={null}
+        lastAnswerEffect={null}
+        onSelectOption={vi.fn()}
         onStartGame={onStartGame}
       />,
     )
@@ -91,7 +111,8 @@ describe('GameShellView', () => {
 
 describe('GameShell', () => {
   beforeEach(() => {
-    useGameStore.setState({ game: null })
+    vi.clearAllMocks()
+    useGameStore.setState({ game: null, lastAnswerEffect: null })
   })
 
   it('shows blocked branch when useSpeechGate is blocked', () => {
@@ -120,5 +141,33 @@ describe('GameShell', () => {
     expect(screen.getByRole('region', { name: /àrea de joc/i })).toBeInTheDocument()
     expect(screen.getByText(/0\s*\/\s*3/)).toBeInTheDocument()
     expect(screen.getByText(/0\s*\/\s*10/)).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /escolta la paraula/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('fires confetti when the player answers correctly (including on the last word)', async () => {
+    vi.mocked(useSpeechGate).mockReturnValue({ status: 'ready' })
+
+    render(<GameShell />)
+
+    fireEvent.click(screen.getByRole('button', { name: /començar partida/i }))
+
+    for (let i = 0; i < 3; i += 1) {
+      const correctOption =
+        useGameStore.getState().game!.currentCard!.word.correctOption
+
+      fireEvent.click(
+        screen.getByRole('button', {
+          name: new RegExp(
+            `^${correctOption.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`,
+          ),
+        }),
+      )
+
+      await waitFor(() => {
+        expect(mockAddConfetti).toHaveBeenCalledTimes(i + 1)
+      })
+    }
   })
 })
