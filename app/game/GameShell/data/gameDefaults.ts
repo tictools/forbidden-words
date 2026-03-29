@@ -1,5 +1,5 @@
 /**
- * Configuració per defecte de partida. El banc de paraules viu a `wordsCollection.ts`.
+ * Default game session configuration. The word bank lives in `wordsCollection.ts`.
  */
 import type { GameConfig } from '@core/Game/GameConfig'
 

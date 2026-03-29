@@ -1,6 +1,6 @@
 import type { WordsCollection } from '@core/Word/Word'
 
-/** Banc de grups de paraules (tres opcions per grup). Edita aquest fitxer per canviar el banc. */
+/** Word bank: groups of three options each. Edit this file to change the bank. */
 export const WORDS_COLLECTION: WordsCollection = [
   ['perquè', 'perque', 'perqè'],
   ['hi ha', 'hiha', 'i a'],
