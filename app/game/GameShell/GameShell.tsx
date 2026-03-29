@@ -1,12 +1,9 @@
 import { useMemo } from 'react'
 
-import { displayGameBarMetrics } from '@app/game/displayGameBarMetrics'
-import { useGameStore } from '@app/game/gameStoreInstance'
-import {
-  V1_GAME_CONFIG,
-  V1_SESSION_ID,
-  V1_WORDS_COLLECTION,
-} from '@app/game/v1GameDefaults'
+import { DEFAULT_SESSION_ID, GAME_CONFIG } from '@app/game/GameShell/data/gameDefaults'
+import { WORDS_COLLECTION } from '@app/game/GameShell/data/wordsCollection'
+import { displayGameBarMetrics } from '@app/game/GameShell/metrics/displayGameBarMetrics'
+import { useGameStore } from '@app/game/GameShell/store/gameStoreInstance'
 import type { UseSpeechGateResult } from '@app/speech/useSpeechGate'
 import { useSpeechGate } from '@app/speech/useSpeechGate'
 import { Box } from '@app/ui/atoms/Box/Box'
@@ -106,15 +103,15 @@ export const GameShell = () => {
   const startGame = useGameStore((s) => s.startGame)
 
   const displayMetrics = useMemo(
-    () => displayGameBarMetrics({ game, defaultConfig: V1_GAME_CONFIG }),
+    () => displayGameBarMetrics({ game, defaultConfig: GAME_CONFIG }),
     [game],
   )
 
   const onStartGame = () => {
     startGame({
-      id: V1_SESSION_ID,
-      collection: V1_WORDS_COLLECTION,
-      config: V1_GAME_CONFIG,
+      id: DEFAULT_SESSION_ID,
+      collection: WORDS_COLLECTION,
+      config: GAME_CONFIG,
     })
   }
 

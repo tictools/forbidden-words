@@ -7,9 +7,10 @@ vi.mock('@app/speech/useSpeechGate', () => ({
   useSpeechGate: vi.fn(),
 }))
 
+import { DEFAULT_SESSION_ID, GAME_CONFIG } from '@app/game/GameShell/data/gameDefaults'
+import { WORDS_COLLECTION } from '@app/game/GameShell/data/wordsCollection'
 import { GameShell, GameShellView } from '@app/game/GameShell/GameShell'
-import { useGameStore } from '@app/game/gameStoreInstance'
-import { V1_GAME_CONFIG, V1_SESSION_ID, V1_WORDS_COLLECTION } from '@app/game/v1GameDefaults'
+import { useGameStore } from '@app/game/GameShell/store/gameStoreInstance'
 import type { GameBarMetrics } from '@core/GameProgress/GameBarMetrics'
 import { ERROR_SEVERITY } from '@core/Severity/severityConstants'
 
@@ -109,9 +110,9 @@ describe('GameShell', () => {
     vi.mocked(useSpeechGate).mockReturnValue({ status: 'ready' })
 
     useGameStore.getState().startGame({
-      id: V1_SESSION_ID,
-      collection: V1_WORDS_COLLECTION,
-      config: V1_GAME_CONFIG,
+      id: DEFAULT_SESSION_ID,
+      collection: WORDS_COLLECTION,
+      config: GAME_CONFIG,
     })
 
     render(<GameShell />)
