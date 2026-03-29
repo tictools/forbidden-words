@@ -23,6 +23,11 @@ type Status = (typeof STATUS)[keyof typeof STATUS];
 
 Do not write unions directly when a canonical const object can be used.
 
+## Domain `/core`: types vs constants (REQUIRED)
+
+- In **entity folders** (`core/<Entity>/`), keep **interfaces / type aliases** in files like **`Entity.ts`** (or focused files such as `GameConfig.ts`).
+- Keep **`const` objects** (canonical values, `as const`) in **separate files** — e.g. `gameConstants.ts`, `severityConstants.ts` — and derive union types from them in the type file or next to the const file, **without** mixing unrelated `interface` blocks in the same file as large const maps (see `project-structure`).
+
 ## Flat Interfaces (REQUIRED)
 
 - Prefer one level depth; extract nested inline shapes into named interfaces.
@@ -47,4 +52,4 @@ Use built-in helpers (`Pick`, `Omit`, `Partial`, `Required`, `Readonly`, `Record
 ## Imports
 
 Use `import type` for type-only imports.
-- Import from the **concrete module** that defines the symbol. **No barrel `index.ts` / `index.tsx`** in **`/app`**, **`/core`**, or **`/tests`**—use explicit paths (e.g. `@core/game/createGame`, `@app/<feature>/<Component>/<Component>.tsx`; see `project-structure`).
+- Import from the **concrete module** that defines the symbol. **No barrel `index.ts` / `index.tsx`** in **`/app`**, **`/core`**, or **`/tests`**—use explicit paths (e.g. `@core/Game/logic/createGame`, `@core/Word/Word`, `@app/<feature>/<Component>/<Component>.tsx`; see `project-structure`).
