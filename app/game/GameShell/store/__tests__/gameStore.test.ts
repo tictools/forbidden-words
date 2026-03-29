@@ -1,18 +1,27 @@
 import { describe, expect, it } from 'vitest'
 
 import { ANSWER_EFFECT } from '@core/Answer/answerConstants'
-import { GAME_CONFIG } from '@app/game/GameShell/data/gameDefaults'
-import { WORDS_COLLECTION } from '@app/game/GameShell/data/wordsCollection'
 import { createGameStore } from '@app/game/GameShell/store/gameStore'
 import type { GameConfig } from '@core/Game/GameConfig'
 import { GAME_RESULT, GAME_STATUS } from '@core/Game/gameConstants'
 import { gameBarMetricsFromGame } from '@core/GameProgress/logic/gameBarMetricsFromGame'
 import { ERROR_SEVERITY } from '@core/Severity/severityConstants'
 import type { ShuffleFn } from '@core/shared/randomTypes'
+import type { WordsCollection } from '@core/Word/Word'
 
 const identityShuffle: ShuffleFn = (items) => [...items]
 
-const defaultConfig: GameConfig = GAME_CONFIG
+/** Stable 3-word bank for store tests (independent of production `WORDS_COLLECTION` size). */
+const TEST_WORDS_COLLECTION: WordsCollection = [
+  ['perquè', 'perque', 'perqè'],
+  ['hi ha', 'hiha', 'i a'],
+  ['ahir', 'air', 'ahí'],
+]
+
+const testGameConfig: GameConfig = {
+  maxErrorsAllowed: 10,
+  wordsPerGame: 3,
+}
 
 describe('createGameStore', () => {
   it('startGame delegates to createGame; bar metrics come from domain', () => {
@@ -23,8 +32,8 @@ describe('createGameStore', () => {
 
     useGameStore.getState().startGame({
       id: 's1',
-      collection: WORDS_COLLECTION,
-      config: defaultConfig,
+      collection: TEST_WORDS_COLLECTION,
+      config: testGameConfig,
     })
 
     const { game } = useGameStore.getState()
@@ -51,8 +60,8 @@ describe('createGameStore', () => {
 
     useGameStore.getState().startGame({
       id: 's1',
-      collection: WORDS_COLLECTION,
-      config: defaultConfig,
+      collection: TEST_WORDS_COLLECTION,
+      config: testGameConfig,
     })
 
     useGameStore.getState().submitOption('perquè')
@@ -76,8 +85,8 @@ describe('createGameStore', () => {
 
     useGameStore.getState().startGame({
       id: 's1',
-      collection: WORDS_COLLECTION,
-      config: defaultConfig,
+      collection: TEST_WORDS_COLLECTION,
+      config: testGameConfig,
     })
 
     expect(useGameStore.getState().lastAnswerEffect).toBeNull()
@@ -90,8 +99,8 @@ describe('createGameStore', () => {
 
     useGameStore.getState().startGame({
       id: 's2',
-      collection: WORDS_COLLECTION,
-      config: defaultConfig,
+      collection: TEST_WORDS_COLLECTION,
+      config: testGameConfig,
     })
 
     expect(useGameStore.getState().lastAnswerEffect).toBeNull()
@@ -105,8 +114,8 @@ describe('createGameStore', () => {
 
     useGameStore.getState().startGame({
       id: 'session-reset',
-      collection: WORDS_COLLECTION,
-      config: defaultConfig,
+      collection: TEST_WORDS_COLLECTION,
+      config: testGameConfig,
     })
 
     useGameStore.getState().submitOption('perque')
@@ -153,7 +162,7 @@ describe('createGameStore', () => {
 
     useGameStore.getState().startGame({
       id: 'finish',
-      collection: WORDS_COLLECTION,
+      collection: TEST_WORDS_COLLECTION,
       config: { maxErrorsAllowed: 10, wordsPerGame: 3 },
     })
 

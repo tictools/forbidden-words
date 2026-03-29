@@ -14,6 +14,7 @@ import { Main } from '@app/ui/atoms/Main/Main'
 import { RenderOrNull } from '@app/ui/atoms/RenderOrNull/RenderOrNull'
 import { Section } from '@app/ui/atoms/Section/Section'
 import { Text } from '@app/ui/atoms/Text/Text'
+import { GameEndPanel } from '@app/ui/molecules/GameEndPanel/GameEndPanel'
 import { GameProgressBars } from '@app/ui/molecules/GameProgressBars/GameProgressBars'
 import { GameWordCard } from '@app/ui/molecules/GameWordCard/GameWordCard'
 import type { AnswerEffect } from '@core/Answer/Answer'
@@ -30,6 +31,8 @@ export type GameShellViewProps = {
   readonly lastAnswerEffect: AnswerEffect | null
   readonly onSelectOption: (option: string) => void
   readonly onStartGame?: () => void
+  readonly onReset?: () => void
+  readonly closeWindow?: () => void
 }
 
 export const GameShellView = ({
@@ -40,11 +43,27 @@ export const GameShellView = ({
   lastAnswerEffect,
   onSelectOption,
   onStartGame,
+  onReset,
+  closeWindow,
 }: GameShellViewProps) => {
   const activeCard =
     hasActiveGame && game?.status === GAME_STATUS.ACTIVE
       ? game.currentCard
       : null
+
+  const showEndPanel =
+    hasActiveGame &&
+    game?.status === GAME_STATUS.FINISHED &&
+    game.result !== null
+
+  const endGamePanel =
+    showEndPanel && game !== null && game.result !== null ? (
+      <GameEndPanel
+        result={game.result}
+        onPlayAgain={() => onReset?.()}
+        closeWindow={closeWindow}
+      />
+    ) : null
 
   if (speech.status === 'blocked') {
     return (
@@ -109,6 +128,9 @@ export const GameShellView = ({
                 onSelectOption={onSelectOption}
               />
             </RenderOrNull>
+            <RenderOrNull shouldRender={endGamePanel !== null}>
+              {endGamePanel}
+            </RenderOrNull>
           </Section>
         </Section>
       </Box>
@@ -122,6 +144,7 @@ export const GameShell = () => {
   const lastAnswerEffect = useGameStore((s) => s.lastAnswerEffect)
   const startGame = useGameStore((s) => s.startGame)
   const submitOption = useGameStore((s) => s.submitOption)
+  const reset = useGameStore((s) => s.reset)
 
   const displayMetrics = useMemo(
     () => displayGameBarMetrics({ game, defaultConfig: GAME_CONFIG }),
@@ -151,6 +174,7 @@ export const GameShell = () => {
       lastAnswerEffect={lastAnswerEffect}
       onSelectOption={submitOption}
       onStartGame={onStartGame}
+      onReset={reset}
     />
   )
 }
