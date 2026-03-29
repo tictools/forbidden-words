@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { ANSWER_EFFECT } from '@core/Answer/answerConstants'
 import { GAME_CONFIG } from '@app/game/GameShell/data/gameDefaults'
 import { WORDS_COLLECTION } from '@app/game/GameShell/data/wordsCollection'
 import { createGameStore } from '@app/game/GameShell/store/gameStore'
@@ -65,6 +66,35 @@ describe('createGameStore', () => {
     expect(bars?.answeredCorrectly).toBe(1)
     expect(bars?.wrongAnswers).toBe(0)
     expect(bars?.errorSeverity).toBe(ERROR_SEVERITY.GREEN)
+  })
+
+  it('stores lastAnswerEffect on submit and clears it on startGame', () => {
+    const useGameStore = createGameStore({
+      randomInt: () => 0,
+      shuffle: identityShuffle,
+    })
+
+    useGameStore.getState().startGame({
+      id: 's1',
+      collection: WORDS_COLLECTION,
+      config: defaultConfig,
+    })
+
+    expect(useGameStore.getState().lastAnswerEffect).toBeNull()
+
+    useGameStore.getState().submitOption('perquè')
+
+    expect(useGameStore.getState().lastAnswerEffect).toEqual({
+      kind: ANSWER_EFFECT.CORRECT,
+    })
+
+    useGameStore.getState().startGame({
+      id: 's2',
+      collection: WORDS_COLLECTION,
+      config: defaultConfig,
+    })
+
+    expect(useGameStore.getState().lastAnswerEffect).toBeNull()
   })
 
   it('reset starts a new game with the same session params', () => {
