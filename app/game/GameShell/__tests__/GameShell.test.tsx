@@ -27,9 +27,15 @@ import { gameBarMetricsFromGame } from '@core/GameProgress/logic/gameBarMetricsF
 import { ERROR_SEVERITY } from '@core/Severity/severityConstants'
 import type { ShuffleFn } from '@core/shared/randomTypes'
 
+const wordsPerGame = GAME_CONFIG.wordsPerGame
+
+const initialProgressLabel = new RegExp(
+  `0\\s*\\/\\s*${wordsPerGame}`,
+)
+
 const baseMetrics: GameBarMetrics = {
   answeredCorrectly: 0,
-  totalWords: 3,
+  totalWords: wordsPerGame,
   wrongAnswers: 0,
   maxWrongAnswers: 10,
   errorSeverity: ERROR_SEVERITY.GREEN,
@@ -96,7 +102,7 @@ describe('GameShellView', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('Missatge de bloqueig de prova.')
     expect(screen.queryByRole('region', { name: /àrea de joc/i })).not.toBeInTheDocument()
-    expect(screen.queryByText(/0\s*\/\s*3/)).not.toBeInTheDocument()
+    expect(screen.queryByText(initialProgressLabel)).not.toBeInTheDocument()
   })
 
   it('shows initial word and error counts when speech is ready and metrics are at zero', () => {
@@ -117,7 +123,7 @@ describe('GameShellView', () => {
     expect(
       screen.getByRole('progressbar', { name: /paraules encertades/i }),
     ).toHaveAccessibleName(/paraules encertades/i)
-    expect(screen.getByText(/0\s*\/\s*3/)).toBeInTheDocument()
+    expect(screen.getByText(initialProgressLabel)).toBeInTheDocument()
 
     expect(
       screen.getByRole('progressbar', { name: /errors/i }),
@@ -266,7 +272,7 @@ describe('GameShell', () => {
     render(<GameShell />)
 
     expect(screen.getByRole('region', { name: /àrea de joc/i })).toBeInTheDocument()
-    expect(screen.getByText(/0\s*\/\s*3/)).toBeInTheDocument()
+    expect(screen.getByText(initialProgressLabel)).toBeInTheDocument()
     expect(screen.getByText(/0\s*\/\s*10/)).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /escolta la paraula/i }),
@@ -280,7 +286,7 @@ describe('GameShell', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /començar partida/i }))
 
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < wordsPerGame; i += 1) {
       const correctOption =
         useGameStore.getState().game!.currentCard!.word.correctOption
 
@@ -305,7 +311,7 @@ describe('GameShell', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /començar partida/i }))
 
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < wordsPerGame; i += 1) {
       const correctOption =
         useGameStore.getState().game!.currentCard!.word.correctOption
 
@@ -319,9 +325,9 @@ describe('GameShell', () => {
 
       await waitFor(() => {
         const expectedStatus =
-          i < 2 ? GAME_STATUS.ACTIVE : GAME_STATUS.FINISHED
+          i < wordsPerGame - 1 ? GAME_STATUS.ACTIVE : GAME_STATUS.FINISHED
         expect(useGameStore.getState().game?.status).toBe(expectedStatus)
-        if (i === 2) {
+        if (i === wordsPerGame - 1) {
           expect(useGameStore.getState().game?.result).toBe(GAME_RESULT.WON)
         }
       })
@@ -349,7 +355,7 @@ describe('GameShell', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /començar partida/i }))
 
-    for (let i = 0; i < 3; i += 1) {
+    while (useGameStore.getState().game?.status === GAME_STATUS.ACTIVE) {
       const wrongOption =
         useGameStore.getState().game!.currentCard!.word.wrongOptions[0]!
 
@@ -378,7 +384,7 @@ describe('GameShell', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /començar partida/i }))
 
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < wordsPerGame; i += 1) {
       const correctOption =
         useGameStore.getState().game!.currentCard!.word.correctOption
 
