@@ -69,13 +69,14 @@ describe('useGameWordCard', () => {
   })
 
   it('derives incorrectTargetWord only for incorrect answer effects', () => {
+    const initialProps: UseGameWordCardArgs = {
+      card: baseCard,
+      lastAnswerEffect: null,
+    }
     const { result, rerender } = renderHook(
       (props: UseGameWordCardArgs) => useGameWordCard(props),
       {
-        initialProps: {
-          card: baseCard,
-          lastAnswerEffect: null,
-        } satisfies UseGameWordCardArgs,
+        initialProps,
       },
     )
 
