@@ -6,6 +6,7 @@ description: Project structure for app/core/tests; entity-first domain layout un
 # Project structure
 
 - Use `/app` for UI (React components, routes/pages, UI hooks).
+- **Component-specific hooks** live under the owning component: `app/.../ComponentName/useSomething/useSomething.ts` (see `create-react-component` for the full pattern). **Domain** behavior and types stay under `/core`, not in UI hook folders.
 - Use `/core` for domain logic (entities, domain services, pure logic).
 - Use `/tests` **only** for: global test **configuration** (e.g. Vitest `setupFiles`), shared **mocks/fakes**, and **mother objects/builders**. Do **not** put domain behavior specs (`*.test.ts` / `*.spec.ts` for code in `/core`) in `/tests`.
 

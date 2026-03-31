@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useSpeechGate } from '@app/speech/useSpeechGate'
+import { useSpeechGate } from '@app/game/GameShell/useSpeechGate/useSpeechGate'
 
 const mockAddConfetti = vi.fn()
 
@@ -11,7 +11,7 @@ vi.mock('js-confetti', () => ({
   },
 }))
 
-vi.mock('@app/speech/useSpeechGate', () => ({
+vi.mock('@app/game/GameShell/useSpeechGate/useSpeechGate', () => ({
   useSpeechGate: vi.fn(),
 }))
 

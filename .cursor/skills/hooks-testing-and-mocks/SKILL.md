@@ -14,3 +14,8 @@ description: Hook extraction requires tests and mocks (Vitest/RTL/MSW)
 
 - Prefer deterministic tests; control time, randomness, and network.
 - If a hook is consumed by multiple components, test the hook's contract (inputs/outputs) rather than duplicating component tests.
+
+## Layout and mocks when paths change
+
+- **Colocated hook tests** live under the hook’s folder: `ComponentName/useHookName/__tests__/useHookName.test.tsx`, mirroring `create-react-component` / `project-structure`.
+- When a hook **moves** (e.g. from a shared package into a component tree), update **`vi.mock` / dynamic imports** in **component tests** so they target the **new module path**; stale mocks silently test the wrong module.
