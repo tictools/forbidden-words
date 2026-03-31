@@ -67,7 +67,10 @@ export const GameShellView = ({
 
   if (speech.status === 'blocked') {
     return (
-      <Main className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 text-emerald-50">
+      <Main
+        lang="ca"
+        className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] text-emerald-50"
+      >
         <Section
           role="alert"
           aria-live="polite"
@@ -82,18 +85,24 @@ export const GameShellView = ({
 
   if (speech.status === 'checking') {
     return (
-      <Main className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 text-emerald-100">
+      <Main
+        lang="ca"
+        className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] text-emerald-100"
+      >
         <Text className="text-base">S'està comprovant la veu…</Text>
       </Main>
     )
   }
 
   return (
-    <Main className="min-h-dvh bg-emerald-950 text-emerald-100">
+    <Main
+      lang="ca"
+      className="min-h-dvh bg-emerald-950 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-emerald-100"
+    >
       <Box className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6 sm:px-6 md:gap-8 md:py-10">
         <Header className="text-center">
           <Text className="text-lg font-semibold tracking-tight text-emerald-50 sm:text-xl">
-            Forbidden Words
+            Paraules prohibides
           </Text>
         </Header>
         <Section
@@ -113,7 +122,7 @@ export const GameShellView = ({
                 <Box className="flex justify-center">
                   <Button
                     type="button"
-                    className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+                    className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
                     onClick={onStartGame}
                   >
                     Començar partida
