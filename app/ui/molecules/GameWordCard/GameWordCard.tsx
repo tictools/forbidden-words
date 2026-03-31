@@ -1,18 +1,10 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  type KeyboardEvent as ReactKeyboardEvent,
-} from 'react'
-
-import { useSpeakTargetWord } from '@app/speech/useSpeakTargetWord'
 import { Box } from '@app/ui/atoms/Box/Box'
 import { Button } from '@app/ui/atoms/Button/Button'
 import { RenderOrNull } from '@app/ui/atoms/RenderOrNull/RenderOrNull'
 import { Section } from '@app/ui/atoms/Section/Section'
 import { Text } from '@app/ui/atoms/Text/Text'
+import { useGameWordCard } from '@app/ui/molecules/GameWordCard/useGameWordCard/useGameWordCard'
 import type { AnswerEffect } from '@core/Answer/Answer'
-import { ANSWER_EFFECT } from '@core/Answer/answerConstants'
 import type { WordCard } from '@core/WordCard/WordCard'
 
 export type GameWordCardProps = {
@@ -21,51 +13,18 @@ export type GameWordCardProps = {
   readonly onSelectOption: (option: string) => void
 }
 
-const OPTION_KEYS_NEXT = new Set([
-  'ArrowRight',
-  'ArrowDown',
-])
-const OPTION_KEYS_PREV = new Set(['ArrowLeft', 'ArrowUp'])
-
 export const GameWordCard = ({
   card,
   lastAnswerEffect,
   onSelectOption,
 }: GameWordCardProps) => {
-  const speak = useSpeakTargetWord()
-  const listenRef = useRef<HTMLButtonElement>(null)
-  const optionRefs = useRef<Array<HTMLButtonElement | null>>([])
-
-  useEffect(() => {
-    listenRef.current?.focus()
-  }, [card.word.correctOption])
-
-  const moveOptionFocus = useCallback((fromIndex: number, delta: number) => {
-    const n = card.shuffledOptions.length
-    if (n === 0) return
-    const nextIndex = (fromIndex + delta + n) % n
-    optionRefs.current[nextIndex]?.focus()
-  }, [card.shuffledOptions.length])
-
-  const handleOptionKeyDown = useCallback(
-    (optionIndex: number) => (event: ReactKeyboardEvent<HTMLButtonElement>) => {
-      if (OPTION_KEYS_NEXT.has(event.key)) {
-        event.preventDefault()
-        moveOptionFocus(optionIndex, 1)
-        return
-      }
-      if (OPTION_KEYS_PREV.has(event.key)) {
-        event.preventDefault()
-        moveOptionFocus(optionIndex, -1)
-      }
-    },
-    [moveOptionFocus],
-  )
-
-  const incorrectTargetWord =
-    lastAnswerEffect?.kind === ANSWER_EFFECT.INCORRECT
-      ? lastAnswerEffect.targetWord
-      : null
+  const {
+    speak,
+    listenRef,
+    registerOptionRef,
+    handleOptionKeyDown,
+    incorrectTargetWord,
+  } = useGameWordCard({ card, lastAnswerEffect })
 
   return (
     <Section
@@ -102,7 +61,7 @@ export const GameWordCard = ({
           <Button
             key={`${card.word.correctOption}-${option}`}
             ref={(element) => {
-              optionRefs.current[optionIndex] = element
+              registerOptionRef(optionIndex, element)
             }}
             type="button"
             className="min-h-[44px] flex-1 rounded-md border border-emerald-700/80 bg-emerald-900/50 px-3 py-2 text-sm font-medium text-emerald-50 hover:bg-emerald-800/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 sm:min-w-[8rem]"

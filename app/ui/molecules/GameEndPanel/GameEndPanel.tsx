@@ -1,14 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-
 import { Box } from '@app/ui/atoms/Box/Box'
 import { Button } from '@app/ui/atoms/Button/Button'
 import { RenderOrNull } from '@app/ui/atoms/RenderOrNull/RenderOrNull'
 import { Section } from '@app/ui/atoms/Section/Section'
 import { Text } from '@app/ui/atoms/Text/Text'
+import { useGameEndPanel } from '@app/ui/molecules/GameEndPanel/useGameEndPanel/useGameEndPanel'
 import type { GameResult } from '@core/Game/Game'
 import { GAME_RESULT } from '@core/Game/gameConstants'
-
-const EXIT_DELAY_MS = 5000
 
 export type GameEndPanelProps = {
   readonly result: GameResult
@@ -24,36 +21,8 @@ export const GameEndPanel = ({
     window.close()
   },
 }: GameEndPanelProps) => {
-  const [farewellVisible, setFarewellVisible] = useState(false)
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const playAgainRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    playAgainRef.current?.focus()
-  }, [])
-
-  const clearCloseTimer = () => {
-    if (closeTimerRef.current !== null) {
-      clearTimeout(closeTimerRef.current)
-      closeTimerRef.current = null
-    }
-  }
-
-  useEffect(() => () => clearCloseTimer(), [])
-
-  const handlePlayAgain = () => {
-    clearCloseTimer()
-    setFarewellVisible(false)
-    onPlayAgain()
-  }
-
-  const handleExit = () => {
-    setFarewellVisible(true)
-    clearCloseTimer()
-    closeTimerRef.current = setTimeout(() => {
-      closeWindow()
-    }, EXIT_DELAY_MS)
-  }
+  const { farewellVisible, playAgainRef, handlePlayAgain, handleExit } =
+    useGameEndPanel({ onPlayAgain, closeWindow })
 
   const headingText =
     result === GAME_RESULT.WON ? 'Has guanyat!' : 'Has perdut!'
