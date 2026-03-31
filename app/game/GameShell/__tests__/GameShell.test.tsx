@@ -120,6 +120,8 @@ describe('GameShellView', () => {
     const gameRegion = screen.getByRole('region', { name: /àrea de joc/i })
     expect(gameRegion).toBeInTheDocument()
 
+    expect(screen.getByText(/paraules prohibides/i)).toBeInTheDocument()
+
     expect(
       screen.getByRole('progressbar', { name: /paraules encertades/i }),
     ).toHaveAccessibleName(/paraules encertades/i)

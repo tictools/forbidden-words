@@ -27,6 +27,20 @@ describe('GameEndPanel', () => {
     ).toBeInTheDocument()
   })
 
+  it('focuses Tornar a jugar when the panel mounts', () => {
+    render(
+      <GameEndPanel
+        result={GAME_RESULT.WON}
+        onPlayAgain={vi.fn()}
+        closeWindow={vi.fn()}
+      />,
+    )
+
+    expect(
+      screen.getByRole('button', { name: /tornar a jugar/i }),
+    ).toHaveFocus()
+  })
+
   it('shows a lost heading when result is lost', () => {
     render(
       <GameEndPanel

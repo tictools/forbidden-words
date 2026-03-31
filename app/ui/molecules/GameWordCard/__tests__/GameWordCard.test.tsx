@@ -144,6 +144,58 @@ describe('GameWordCard', () => {
     expect(onSelectOption).toHaveBeenCalledWith('perque')
   })
 
+  it('moves focus between options with arrow keys only within the option group', () => {
+    const onSelectOption = vi.fn()
+
+    render(
+      <GameWordCard
+        card={baseCard}
+        lastAnswerEffect={null}
+        onSelectOption={onSelectOption}
+      />,
+    )
+
+    const optionLabels = baseCard.shuffledOptions
+    const first = screen.getByRole('button', { name: new RegExp(`^${optionLabels[0]}$`) })
+    const second = screen.getByRole('button', { name: new RegExp(`^${optionLabels[1]}$`) })
+    const third = screen.getByRole('button', { name: new RegExp(`^${optionLabels[2]}$`) })
+
+    first.focus()
+    expect(first).toHaveFocus()
+
+    fireEvent.keyDown(first, { key: 'ArrowRight' })
+    expect(second).toHaveFocus()
+
+    fireEvent.keyDown(second, { key: 'ArrowLeft' })
+    expect(first).toHaveFocus()
+
+    fireEvent.keyDown(first, { key: 'ArrowUp' })
+    expect(third).toHaveFocus()
+
+    fireEvent.keyDown(third, { key: 'ArrowDown' })
+    expect(first).toHaveFocus()
+  })
+
+  it('does not move focus from the listen control with arrow keys', async () => {
+    const onSelectOption = vi.fn()
+
+    render(
+      <GameWordCard
+        card={baseCard}
+        lastAnswerEffect={null}
+        onSelectOption={onSelectOption}
+      />,
+    )
+
+    const listen = screen.getByRole('button', { name: /escolta la paraula/i })
+    await waitFor(() => {
+      expect(listen).toHaveFocus()
+    })
+
+    fireEvent.keyDown(listen, { key: 'ArrowDown' })
+    expect(listen).toHaveFocus()
+  })
+
   it('shows Catalan error copy with the target word after an incorrect answer', () => {
     const onSelectOption = vi.fn()
 
