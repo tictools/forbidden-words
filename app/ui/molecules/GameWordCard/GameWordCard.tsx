@@ -35,7 +35,7 @@ export const GameWordCard = ({
         <Button
           ref={listenRef}
           type="button"
-          className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+          className="rounded-md bg-accent px-4 py-2 text-base font-medium text-white shadow hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring-focus"
           onClick={() => {
             speak(card.word.audioText)
           }}
@@ -47,7 +47,7 @@ export const GameWordCard = ({
         <Text
           role="status"
           aria-live="polite"
-          className="rounded-md border border-amber-800/60 bg-amber-950/50 px-3 py-2 text-center text-sm text-amber-100"
+          className="rounded-md border border-warning-border bg-warning-bg px-3 py-2 text-center text-base text-warning-foreground"
         >
           L&apos;opció correcta és {incorrectTargetWord}
         </Text>
@@ -64,7 +64,7 @@ export const GameWordCard = ({
               registerOptionRef(optionIndex, element)
             }}
             type="button"
-            className="min-h-[44px] flex-1 rounded-md border border-emerald-700/80 bg-emerald-900/50 px-3 py-2 text-sm font-medium text-emerald-50 hover:bg-emerald-800/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 sm:min-w-[8rem]"
+            className="min-h-[44px] flex-1 rounded-md border border-chip-border bg-chip-bg px-3 py-2 text-base font-medium text-foreground hover:bg-chip-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring-focus sm:min-w-[8rem]"
             onKeyDown={handleOptionKeyDown(optionIndex)}
             onClick={() => {
               onSelectOption(option)

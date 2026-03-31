@@ -13,10 +13,10 @@ export type ProgressMetricBarProps = {
 }
 
 function fillClassForErrors(severity: ErrorSeverity): string {
-  if (severity === ERROR_SEVERITY.GREEN) return 'bg-emerald-500'
-  if (severity === ERROR_SEVERITY.YELLOW) return 'bg-amber-400'
-  if (severity === ERROR_SEVERITY.ORANGE) return 'bg-orange-500'
-  return 'bg-red-600'
+  if (severity === ERROR_SEVERITY.GREEN) return 'bg-emerald-600'
+  if (severity === ERROR_SEVERITY.YELLOW) return 'bg-amber-500'
+  if (severity === ERROR_SEVERITY.ORANGE) return 'bg-orange-600'
+  return 'bg-red-700'
 }
 
 export const ProgressMetricBar = ({
@@ -30,14 +30,14 @@ export const ProgressMetricBar = ({
   const pct = Math.min(100, Math.round((current / safeTotal) * 100))
   const fillClass =
     variant === 'words'
-      ? 'bg-emerald-400'
+      ? 'bg-accent'
       : fillClassForErrors(errorSeverity ?? ERROR_SEVERITY.GREEN)
 
   return (
     <Box className="flex flex-col gap-2">
       <Box className="flex items-baseline justify-between gap-3">
-        <Text className="text-sm font-medium text-emerald-100/90">{ariaLabel}</Text>
-        <Text className="tabular-nums text-sm text-emerald-50">
+        <Text className="text-base font-medium text-foreground">{ariaLabel}</Text>
+        <Text className="tabular-nums text-base text-foreground-muted">
           {current} / {total}
         </Text>
       </Box>
@@ -47,7 +47,7 @@ export const ProgressMetricBar = ({
         aria-valuemin={0}
         aria-valuemax={total}
         aria-label={ariaLabel}
-        className="h-2.5 w-full overflow-hidden rounded-full bg-emerald-950/80"
+        className="h-2.5 w-full overflow-hidden rounded-full bg-progress-track"
       >
         <Box
           className={`h-full rounded-full transition-[width] duration-300 ${fillClass}`}

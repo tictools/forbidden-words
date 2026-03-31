@@ -35,7 +35,7 @@ export const GameEndPanel = ({
       <Text
         role="heading"
         aria-level={2}
-        className="text-lg font-semibold text-emerald-50"
+        className="text-lg font-semibold text-foreground"
       >
         {headingText}
       </Text>
@@ -43,14 +43,14 @@ export const GameEndPanel = ({
         <Button
           ref={playAgainRef}
           type="button"
-          className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+          className="rounded-md bg-accent px-4 py-2 text-base font-medium text-white shadow hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring-focus"
           onClick={handlePlayAgain}
         >
           Tornar a jugar
         </Button>
         <Button
           type="button"
-          className="rounded-md border border-emerald-700/80 bg-emerald-900/50 px-4 py-2 text-sm font-medium text-emerald-50 hover:bg-emerald-800/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+          className="rounded-md border border-chip-border bg-chip-bg px-4 py-2 text-base font-medium text-foreground hover:bg-chip-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring-focus"
           onClick={handleExit}
         >
           Sortir del joc
@@ -60,7 +60,7 @@ export const GameEndPanel = ({
         <Text
           role="status"
           aria-live="polite"
-          className="text-base text-emerald-200/95"
+          className="text-base text-foreground-muted"
         >
           Fins una altra
         </Text>

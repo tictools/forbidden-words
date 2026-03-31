@@ -45,17 +45,20 @@ export const GameShellView = ({
       />
     ) : null
 
+  const mainShellClass =
+    'flex min-h-dvh flex-col items-center justify-center bg-page px-4 py-8 text-foreground'
+
   if (speech.status === 'blocked') {
     return (
       <Main
         lang="ca"
-        className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] text-emerald-50"
+        className={`${mainShellClass} pb-[max(2rem,env(safe-area-inset-bottom))]`}
       >
         <Section
           role="alert"
           aria-live="polite"
           lang="ca"
-          className="max-w-prose rounded-lg border border-red-900/60 bg-red-950/40 px-4 py-3 text-center"
+          className="max-w-prose rounded-lg border border-danger-border bg-danger-bg px-4 py-3 text-center text-danger-foreground"
         >
           <Text>{speech.message}</Text>
         </Section>
@@ -67,9 +70,11 @@ export const GameShellView = ({
     return (
       <Main
         lang="ca"
-        className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] text-emerald-100"
+        className={`${mainShellClass} pb-[max(2rem,env(safe-area-inset-bottom))]`}
       >
-        <Text className="text-base">S'està comprovant la veu…</Text>
+        <Text className="text-base text-foreground-muted">
+          S'està comprovant la veu…
+        </Text>
       </Main>
     )
   }
@@ -77,32 +82,32 @@ export const GameShellView = ({
   return (
     <Main
       lang="ca"
-      className="min-h-dvh bg-emerald-950 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-emerald-100"
+      className={`${mainShellClass} pb-[max(1.5rem,env(safe-area-inset-bottom))]`}
     >
       <Box className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6 sm:px-6 md:gap-8 md:py-10">
         <Header className="text-center">
-          <Text className="text-lg font-semibold tracking-tight text-emerald-50 sm:text-xl">
+          <Text className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
             Paraules prohibides
           </Text>
         </Header>
         <Section
           aria-label="Àrea de joc"
-          className="flex flex-col gap-6 rounded-xl border border-emerald-800/50 bg-emerald-900/30 p-4 shadow-inner sm:p-6 md:gap-8"
+          className="flex flex-col gap-6 rounded-2xl border border-border-subtle bg-surface p-4 shadow-md ring-1 ring-border-subtle/50 sm:p-6 md:gap-8"
         >
           <GameProgressBars metrics={displayMetrics} />
           <Section
             aria-label="Targeta de joc"
-            className="flex min-h-[12rem] flex-col justify-center gap-4 rounded-lg border border-dashed border-emerald-700/60 bg-emerald-950/40 p-4 sm:min-h-[14rem]"
+            className="flex min-h-[12rem] flex-col justify-center gap-4 rounded-lg border border-dashed border-border-strong bg-surface-muted p-4 sm:min-h-[14rem]"
           >
             <RenderOrNull shouldRender={!hasActiveGame}>
-              <Text className="text-center text-sm text-emerald-200/90">
+              <Text className="text-center text-sm text-foreground-muted">
                 Esperant inici de partida.
               </Text>
               <RenderOrNull shouldRender={Boolean(onStartGame)}>
                 <Box className="flex justify-center">
                   <Button
                     type="button"
-                    className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+                    className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white shadow hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring-focus"
                     onClick={onStartGame}
                   >
                     Començar partida
