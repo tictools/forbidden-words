@@ -1,12 +1,4 @@
-import JSConfetti from 'js-confetti'
-import { useEffect, useMemo } from 'react'
-
-import { DEFAULT_SESSION_ID, GAME_CONFIG } from '@app/game/GameShell/data/gameDefaults'
-import { WORDS_COLLECTION } from '@app/game/GameShell/data/wordsCollection'
-import { displayGameBarMetrics } from '@app/game/GameShell/metrics/displayGameBarMetrics'
-import { useGameStore } from '@app/game/GameShell/store/gameStoreInstance'
-import type { UseSpeechGateResult } from '@app/speech/useSpeechGate'
-import { useSpeechGate } from '@app/speech/useSpeechGate'
+import { useGameShell } from '@app/game/GameShell/useGameShell/useGameShell'
 import { Box } from '@app/ui/atoms/Box/Box'
 import { Header } from '@app/ui/atoms/Header/Header'
 import { Button } from '@app/ui/atoms/Button/Button'
@@ -17,23 +9,11 @@ import { Text } from '@app/ui/atoms/Text/Text'
 import { GameEndPanel } from '@app/ui/molecules/GameEndPanel/GameEndPanel'
 import { GameProgressBars } from '@app/ui/molecules/GameProgressBars/GameProgressBars'
 import { GameWordCard } from '@app/ui/molecules/GameWordCard/GameWordCard'
-import type { AnswerEffect } from '@core/Answer/Answer'
-import { ANSWER_EFFECT } from '@core/Answer/answerConstants'
-import type { Game } from '@core/Game/Game'
 import { GAME_STATUS } from '@core/Game/gameConstants'
-import type { GameBarMetrics } from '@core/GameProgress/GameBarMetrics'
 
-export type GameShellViewProps = {
-  readonly speech: UseSpeechGateResult
-  readonly displayMetrics: GameBarMetrics
-  readonly hasActiveGame: boolean
-  readonly game: Game | null
-  readonly lastAnswerEffect: AnswerEffect | null
-  readonly onSelectOption: (option: string) => void
-  readonly onStartGame?: () => void
-  readonly onReset?: () => void
-  readonly closeWindow?: () => void
-}
+import type { GameShellViewProps } from '@app/game/GameShell/gameShellViewProps'
+
+export type { GameShellViewProps }
 
 export const GameShellView = ({
   speech,
@@ -65,17 +45,20 @@ export const GameShellView = ({
       />
     ) : null
 
+  const mainShellClass =
+    'flex min-h-dvh flex-col items-center justify-center bg-page px-4 py-8 text-foreground'
+
   if (speech.status === 'blocked') {
     return (
       <Main
         lang="ca"
-        className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] text-emerald-50"
+        className={`${mainShellClass} pb-[max(2rem,env(safe-area-inset-bottom))]`}
       >
         <Section
           role="alert"
           aria-live="polite"
           lang="ca"
-          className="max-w-prose rounded-lg border border-red-900/60 bg-red-950/40 px-4 py-3 text-center"
+          className="max-w-prose rounded-lg border border-danger-border bg-danger-bg px-4 py-3 text-center text-danger-foreground"
         >
           <Text>{speech.message}</Text>
         </Section>
@@ -87,9 +70,11 @@ export const GameShellView = ({
     return (
       <Main
         lang="ca"
-        className="flex min-h-dvh items-center justify-center bg-emerald-950 px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] text-emerald-100"
+        className={`${mainShellClass} pb-[max(2rem,env(safe-area-inset-bottom))]`}
       >
-        <Text className="text-base">S'està comprovant la veu…</Text>
+        <Text className="text-base text-foreground-muted">
+          S'està comprovant la veu…
+        </Text>
       </Main>
     )
   }
@@ -97,32 +82,32 @@ export const GameShellView = ({
   return (
     <Main
       lang="ca"
-      className="min-h-dvh bg-emerald-950 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-emerald-100"
+      className={`${mainShellClass} pb-[max(1.5rem,env(safe-area-inset-bottom))]`}
     >
       <Box className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6 sm:px-6 md:gap-8 md:py-10">
         <Header className="text-center">
-          <Text className="text-lg font-semibold tracking-tight text-emerald-50 sm:text-xl">
+          <Text className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
             Paraules prohibides
           </Text>
         </Header>
         <Section
           aria-label="Àrea de joc"
-          className="flex flex-col gap-6 rounded-xl border border-emerald-800/50 bg-emerald-900/30 p-4 shadow-inner sm:p-6 md:gap-8"
+          className="flex flex-col gap-6 rounded-2xl border border-border-subtle bg-surface p-4 shadow-md ring-1 ring-border-subtle/50 sm:p-6 md:gap-8"
         >
           <GameProgressBars metrics={displayMetrics} />
           <Section
             aria-label="Targeta de joc"
-            className="flex min-h-[12rem] flex-col justify-center gap-4 rounded-lg border border-dashed border-emerald-700/60 bg-emerald-950/40 p-4 sm:min-h-[14rem]"
+            className="flex min-h-[12rem] flex-col justify-center gap-4 rounded-lg border border-dashed border-border-strong bg-surface-muted p-4 sm:min-h-[14rem]"
           >
             <RenderOrNull shouldRender={!hasActiveGame}>
-              <Text className="text-center text-sm text-emerald-200/90">
+              <Text className="text-center text-sm text-foreground-muted">
                 Esperant inici de partida.
               </Text>
               <RenderOrNull shouldRender={Boolean(onStartGame)}>
                 <Box className="flex justify-center">
                   <Button
                     type="button"
-                    className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+                    className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white shadow hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring-focus"
                     onClick={onStartGame}
                   >
                     Començar partida
@@ -147,43 +132,4 @@ export const GameShellView = ({
   )
 }
 
-export const GameShell = () => {
-  const speech = useSpeechGate()
-  const game = useGameStore((s) => s.game)
-  const lastAnswerEffect = useGameStore((s) => s.lastAnswerEffect)
-  const startGame = useGameStore((s) => s.startGame)
-  const submitOption = useGameStore((s) => s.submitOption)
-  const reset = useGameStore((s) => s.reset)
-
-  const displayMetrics = useMemo(
-    () => displayGameBarMetrics({ game, defaultConfig: GAME_CONFIG }),
-    [game],
-  )
-
-  const onStartGame = () => {
-    startGame({
-      id: DEFAULT_SESSION_ID,
-      collection: WORDS_COLLECTION,
-      config: GAME_CONFIG,
-    })
-  }
-
-  useEffect(() => {
-    if (lastAnswerEffect?.kind !== ANSWER_EFFECT.CORRECT) return
-    const confetti = new JSConfetti()
-    void confetti.addConfetti()
-  }, [lastAnswerEffect])
-
-  return (
-    <GameShellView
-      speech={speech}
-      displayMetrics={displayMetrics}
-      hasActiveGame={game !== null}
-      game={game}
-      lastAnswerEffect={lastAnswerEffect}
-      onSelectOption={submitOption}
-      onStartGame={onStartGame}
-      onReset={reset}
-    />
-  )
-}
+export const GameShell = () => <GameShellView {...useGameShell()} />

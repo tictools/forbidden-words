@@ -1,7 +1,7 @@
 import { render, renderHook, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { type UseSpeechGateResult, useSpeechGate } from '@app/speech/useSpeechGate'
+import { type UseSpeechGateResult, useSpeechGate } from '@app/game/GameShell/useSpeechGate/useSpeechGate'
 
 function SpeechGateAlert() {
   const gate: UseSpeechGateResult = useSpeechGate()

@@ -22,6 +22,14 @@ metadata:
 - Prefer early returns for loading/error/empty states.
 - Keep UI components thin and extract business logic to `use<Feature>` hooks.
 
+## Colocated hooks under the component
+
+- Put hooks that belong to a single component **next to that component**, not in a generic `hooks/` (or `utils/` / `helpers/`) folder used only to group hooks.
+- **One directory per hook**, named after the hook, **inside** the component folder:
+  - `ComponentName/useHookName/useHookName.ts`
+  - `ComponentName/useHookName/__tests__/useHookName.test.tsx` (or `.test.ts` when no JSX)
+- Imports stay **explicit** to the hook file (e.g. `@app/ui/molecules/MyCard/useMyCard/useMyCard`); **no** barrels for hooks either (same rule as components).
+
 ## Path Aliases (REQUIRED)
 
 - Use the **project’s** configured aliases (see `vite.config.ts` / `tsconfig.json`); never rely on deep `../../../` across feature boundaries.

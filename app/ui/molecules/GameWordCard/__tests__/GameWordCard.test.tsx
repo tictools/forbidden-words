@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { SPEECH_RATE } from '@app/speech/useSpeakTargetWord'
+import { SPEECH_RATE } from '@app/ui/molecules/GameWordCard/useSpeakTargetWord/useSpeakTargetWord'
 import { GameWordCard } from '@app/ui/molecules/GameWordCard/GameWordCard'
 import { ANSWER_EFFECT } from '@core/Answer/answerConstants'
 import type { Word } from '@core/Word/Word'
