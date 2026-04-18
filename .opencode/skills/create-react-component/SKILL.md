@@ -1,0 +1,1 @@
+../../../.cursor/skills/create-react-component/SKILL.md

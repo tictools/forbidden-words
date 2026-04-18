@@ -1,0 +1,1 @@
+../../../.cursor/skills/skill-creator/SKILL.md
