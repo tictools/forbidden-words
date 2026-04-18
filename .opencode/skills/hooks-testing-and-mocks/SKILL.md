@@ -1,0 +1,1 @@
+../../../.cursor/skills/hooks-testing-and-mocks/SKILL.md

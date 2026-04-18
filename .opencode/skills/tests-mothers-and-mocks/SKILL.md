@@ -1,0 +1,1 @@
+../../../.cursor/skills/tests-mothers-and-mocks/SKILL.md
