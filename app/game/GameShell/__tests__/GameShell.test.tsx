@@ -120,7 +120,9 @@ describe('GameShellView', () => {
     const gameRegion = screen.getByRole('region', { name: /àrea de joc/i })
     expect(gameRegion).toBeInTheDocument()
 
-    expect(screen.getByText(/paraules prohibides/i)).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: /paraules prohibides/i }),
+    ).toBeInTheDocument()
 
     expect(
       screen.getByRole('progressbar', { name: /paraules encertades/i }),
@@ -187,7 +189,7 @@ describe('GameShellView', () => {
       screen.getByRole('region', { name: /fi de partida/i }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('heading', { name: /has guanyat/i }),
+      screen.getByRole('heading', { level: 2, name: /has guanyat/i }),
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /tornar a jugar/i }),
@@ -214,7 +216,7 @@ describe('GameShellView', () => {
     )
 
     expect(
-      screen.getByRole('heading', { name: /has perdut/i }),
+      screen.getByRole('heading', { level: 2, name: /has perdut/i }),
     ).toBeInTheDocument()
   })
 
@@ -336,7 +338,7 @@ describe('GameShell', () => {
     }
 
     expect(
-      screen.getByRole('heading', { name: /has guanyat/i }),
+      screen.getByRole('heading', { level: 2, name: /has guanyat/i }),
     ).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: /tornar a jugar/i }))
@@ -371,7 +373,7 @@ describe('GameShell', () => {
     }
 
     expect(
-      screen.getByRole('heading', { name: /has perdut/i }),
+      screen.getByRole('heading', { level: 2, name: /has perdut/i }),
     ).toBeInTheDocument()
     expect(useGameStore.getState().game?.result).toBe(GAME_RESULT.LOST)
   })
@@ -400,7 +402,7 @@ describe('GameShell', () => {
     }
 
     expect(
-      screen.getByRole('heading', { name: /has guanyat/i }),
+      screen.getByRole('heading', { level: 2, name: /has guanyat/i }),
     ).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: /sortir del joc/i }))
