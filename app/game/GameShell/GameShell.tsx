@@ -1,6 +1,7 @@
 import { useGameShell } from '@app/game/GameShell/useGameShell/useGameShell'
 import { Box } from '@app/ui/atoms/Box/Box'
 import { Header } from '@app/ui/atoms/Header/Header'
+import { Heading } from '@app/ui/atoms/Heading/Heading'
 import { Button } from '@app/ui/atoms/Button/Button'
 import { Main } from '@app/ui/atoms/Main/Main'
 import { RenderOrNull } from '@app/ui/atoms/RenderOrNull/RenderOrNull'
@@ -86,9 +87,12 @@ export const GameShellView = ({
     >
       <Box className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6 sm:px-6 md:gap-8 md:py-10">
         <Header className="text-center">
-          <Text className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+          <Heading
+            level={1}
+            className="text-lg font-semibold tracking-tight text-foreground sm:text-xl"
+          >
             Paraules prohibides
-          </Text>
+          </Heading>
         </Header>
         <Section
           aria-label="Àrea de joc"

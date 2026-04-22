@@ -2,6 +2,7 @@ import { Box } from '@app/ui/atoms/Box/Box'
 import { Button } from '@app/ui/atoms/Button/Button'
 import { RenderOrNull } from '@app/ui/atoms/RenderOrNull/RenderOrNull'
 import { Section } from '@app/ui/atoms/Section/Section'
+import { Heading } from '@app/ui/atoms/Heading/Heading'
 import { Text } from '@app/ui/atoms/Text/Text'
 import { useGameEndPanel } from '@app/ui/molecules/GameEndPanel/useGameEndPanel/useGameEndPanel'
 import type { GameResult } from '@core/Game/Game'
@@ -32,13 +33,9 @@ export const GameEndPanel = ({
       aria-label="Fi de partida"
       className="flex flex-col items-center gap-4 text-center"
     >
-      <Text
-        role="heading"
-        aria-level={2}
-        className="text-lg font-semibold text-foreground"
-      >
+      <Heading level={2} className="text-lg font-semibold text-foreground">
         {headingText}
-      </Text>
+      </Heading>
       <Box className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         <Button
           ref={playAgainRef}

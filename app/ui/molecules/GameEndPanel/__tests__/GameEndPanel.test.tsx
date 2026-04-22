@@ -15,7 +15,7 @@ describe('GameEndPanel', () => {
     )
 
     expect(
-      screen.getByRole('heading', { name: /has guanyat/i }),
+      screen.getByRole('heading', { level: 2, name: /has guanyat/i }),
     ).toBeInTheDocument()
   })
 
@@ -29,7 +29,7 @@ describe('GameEndPanel', () => {
     )
 
     expect(
-      screen.getByRole('heading', { name: /has perdut/i }),
+      screen.getByRole('heading', { level: 2, name: /has perdut/i }),
     ).toBeInTheDocument()
   })
 })
