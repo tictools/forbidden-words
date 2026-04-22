@@ -33,4 +33,4 @@ Use this skill when writing, reviewing, or refactoring React/Next.js for perform
 
 ## Usage
 
-Read detailed rule files from the tool-specific rule directories during implementation.
+The **full checklist** (all `async-*`, `bundle-*`, `rerender-*`, etc.) lives in the project rule **[`.cursor/rules/vercel-react-best-practices.mdc`](.cursor/rules/vercel-react-best-practices.mdc)**. Apply that rule when editing `app/**/*.{ts,tsx}`; use this skill for **priority order** and **high-impact** reminders only.

@@ -5,6 +5,7 @@ description: Hook extraction requires tests and mocks (Vitest/RTL/MSW)
 
 # Hooks: testing and mocks
 
+- Hook folder layout: **`.cursor/skills/create-react-component/SKILL.md`** (“Colocated hooks under the component”).
 - When extracting or adding a hook (`use*`), also add/adjust tests.
 - Use **Vitest** for unit tests.
 - Use **React Testing Library** when the hook is UI-facing (renderHook, interactions, state changes).

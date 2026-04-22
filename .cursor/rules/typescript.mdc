@@ -1,6 +1,6 @@
 ---
 description: TypeScript strict patterns and best practices
-globs: app/**/*.{ts,tsx}
+globs: app/**/*.{ts,tsx},core/**/*.{ts,tsx},tests/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
@@ -82,3 +82,9 @@ function isUser(value: unknown): value is User {
 import type { User } from "./types";
 import { createUser, type Config } from "./utils";
 ```
+
+## Repository layout (`/app`, `/core`, `/tests`)
+
+For folder layout, no barrels, colocated domain tests under `core/<Entity>/logic/__tests__/`, and what belongs in `/tests` vs `/core`, read **`.cursor/skills/project-structure/SKILL.md`**.
+
+For TypeScript conventions specific to **`/core`** (types vs constants, `XxxParams`, path imports), read **`.cursor/skills/typescript/SKILL.md`** in addition to this rule.

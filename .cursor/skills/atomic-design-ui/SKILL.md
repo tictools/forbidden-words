@@ -5,6 +5,8 @@ description: Atomic Design conventions for UI components
 
 # Atomic Design (UI)
 
+The project rule **[`.cursor/rules/atomic-design-ui.mdc`](.cursor/rules/atomic-design-ui.mdc)** defines strict **HTML-only-in-atoms**, repo paths under `app/ui/`, and verification commands. This skill adds **visual-only conditional rendering** patterns below.
+
 - Organize UI as **Atomic Design** (atoms/molecules/organisms/templates/pages or the repo's agreed variant).
 - New components should be placed in the smallest appropriate level; don't skip levels without reason.
 - Favor composition over inheritance; keep components focused and reusable.

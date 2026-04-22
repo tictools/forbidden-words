@@ -32,12 +32,8 @@ metadata:
 
 ## Path Aliases (REQUIRED)
 
-- Use the **project’s** configured aliases (see `vite.config.ts` / `tsconfig.json`); never rely on deep `../../../` across feature boundaries.
-- **This repository** maps:
-  - `@app/*` → `app/*`
-  - `@core/*` → `core/*`
-  - `@tests/*` → `tests/*`
-- Other codebases may use a `src/` tree with `@/*` or `@/components/*`, etc.—always align imports with the active config.
+- Use aliases from `tsconfig.json`; never use deep `../../../` across feature boundaries.
+- `@app/*` → `app/*`, `@core/*` → `core/*`, `@tests/*` → `tests/*` (see project rule **`.cursor/rules/create-react-component.mdc`** for examples and testing conventions).
 
 ## Testing (REQUIRED)
 
@@ -47,4 +43,4 @@ metadata:
 
 ## Resources
 
-- For optimization patterns, see `vercel-react-best-practices`.
+- For optimization patterns, see skill `vercel-react-best-practices` and project rule `.cursor/rules/vercel-react-best-practices.mdc`.
