@@ -13,10 +13,10 @@ export type ProgressMetricBarProps = {
 }
 
 function fillClassForErrors(severity: ErrorSeverity): string {
-  if (severity === ERROR_SEVERITY.GREEN) return 'bg-emerald-600'
-  if (severity === ERROR_SEVERITY.YELLOW) return 'bg-amber-500'
-  if (severity === ERROR_SEVERITY.ORANGE) return 'bg-orange-600'
-  return 'bg-red-700'
+  if (severity === ERROR_SEVERITY.GREEN) return 'bg-success'
+  if (severity === ERROR_SEVERITY.YELLOW) return 'bg-warning'
+  if (severity === ERROR_SEVERITY.ORANGE) return 'bg-caution'
+  return 'bg-critical'
 }
 
 export const ProgressMetricBar = ({
@@ -50,7 +50,7 @@ export const ProgressMetricBar = ({
         className="h-2.5 w-full overflow-hidden rounded-full bg-progress-track"
       >
         <Box
-          className={`h-full rounded-full transition-[width] duration-300 ${fillClass}`}
+          className={`h-full rounded-full shadow-[inset_0_0_0_1px_rgb(0_0_0/0.12)] transition-[width] duration-300 ${fillClass}`}
           style={{ width: `${pct}%` }}
         />
       </Box>
