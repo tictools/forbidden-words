@@ -24,46 +24,46 @@ When creating or refactoring React components:
   ```
 
 ## Path Aliases (REQUIRED)
-**ALL imports MUST use path aliases. NEVER use relative imports.**
+**ALL imports MUST use path aliases across feature boundaries. NEVER use deep relative imports (`../../`).**
 
-### Available Aliases
-- `@/*` → `./src/*`
-- `@/components/*` → `./src/components/*`
-- `@/atoms/*` → `./src/components/atoms/*`
-- `@/molecules/*` → `./src/components/molecules/*`
-- `@/data/*` → `./src/data/*`
-- `@/assets/*` → `./src/assets/*`
+### Available Aliases (this repo)
+Defined in `tsconfig.json`:
+- `@app/*` → `./app/*`
+- `@core/*` → `./core/*`
+- `@tests/*` → `./tests/*`
 
 ### Examples
-❌ **INCORRECT** (relative imports):
+❌ **INCORRECT** (relative imports across folders):
 ```tsx
-import { Box } from "../atoms/Box/Box";
-import { Hero } from "./Hero/Hero";
-import { demoData } from "../../data";
+import { Box } from "../../ui/atoms/Box/Box";
+import { demoData } from "../data/gameDefaults";
 ```
 
 ✅ **CORRECT** (alias imports):
 ```tsx
-import { Box } from "@/atoms/Box/Box";
-import { Hero } from "@/molecules/Hero/Hero";
-import { demoData } from "@/data";
+import { Box } from "@app/ui/atoms/Box/Box";
+import { createGame } from "@core/Game/logic/createGame";
+import { gameMother } from "@tests/core/Game/gameMother";
 ```
 
 ### Import Rules
-- Components: `@/atoms/ComponentName/ComponentName` or `@/molecules/ComponentName/ComponentName`
-- Data: `@/data` or `@/data/specific-file`
-- Assets: `@/assets/images/logo.png`
-- NEVER use `../` or `./` except within the same component directory
+- UI components: `@app/ui/atoms/...`, `@app/ui/molecules/...`, or `@app/<feature>/...` (concrete file path; no barrels)
+- Domain: `@core/<Entity>/...` (concrete module)
+- Shared test helpers: `@tests/...`
+- **Within the same component directory**, same-folder imports (`./ComponentName`, `./useHook/useHook`) are allowed
 
 ## Patterns
 - Presentational: typed props, minimal logic
 - Data components: early returns + extracted hook + actions object
 - Before memoization/optimization, check vercel-react-best-practices
+- **Atomic Design**: native HTML (`button`, `div`, etc.) only inside **atoms**; see `.cursor/rules/atomic-design-ui.mdc`. For colocated hook layout, see skill `create-react-component` under `.cursor/skills/`.
 
 ## Templates
 
+Examples below use raw HTML for brevity—**in this repo, that pattern is only valid inside files under `app/ui/atoms/`** (or other atom folders). In molecules/organisms, compose existing atoms instead.
+
 ```tsx
-// Presentational
+// Presentational (atom-appropriate: native elements live here only)
 export type ButtonProps = {
   label: string;
   onClick: () => void;
@@ -80,7 +80,7 @@ export const Button = ({ label, onClick, isDisabled = false }: ButtonProps) => {
 ```
 
 ```tsx
-// With hook and early returns
+// Illustrative data component — if this lived under molecules, replace <div>/<ul> with atoms (Box, Text, …)
 export const UsersList = ({ query }: { query: string }) => {
   const { state, actions } = useUsersList({ query });
 
@@ -160,9 +160,9 @@ describe('Button', () => {
   it('calls onClick when clicked', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
-    
+
     render(<Button onClick={onClick}>Click me</Button>);
-    
+
     await user.click(screen.getByRole('button', { name: /click me/i }));
     expect(onClick).toHaveBeenCalledTimes(1);
   });

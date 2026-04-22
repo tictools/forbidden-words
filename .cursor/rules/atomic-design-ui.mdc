@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Atomic Design (UI)
 
+UI in this repo lives under `app/ui/` (e.g. `app/ui/atoms/`, `app/ui/molecules/`). Adjust paths below if you add `organisms/` or `templates/`.
+
 ## Structure
 Organize UI as Atomic Design: atoms/molecules/organisms/templates/pages
 - Place components in smallest appropriate level
@@ -31,16 +33,19 @@ If you need any of these elements in a molecule/organism/template, you **MUST**:
 1. Create an atom that wraps the HTML element
 2. Use that atom in your component
 
+### Visual-only conditional rendering
+For `condition && <UI />` and similar **purely visual** gating in molecules/organisms/templates, use the guard atoms pattern described in `.cursor/skills/atomic-design-ui/SKILL.md` (`RenderOrNull`, `RenderOrFallback`).
+
 ### Examples
 
 **❌ WRONG - HTML elements in molecule:**
 ```tsx
-// app/components/molecules/SearchBar.tsx
+// app/ui/molecules/SearchBar/SearchBar.tsx
 export const SearchBar = () => {
   return (
     <div>  // ❌ NEVER use div in molecules
       <input type="text" />  // ❌ NEVER use input in molecules
-      <button>Search</button>  // ❌ NEVER use button in molecules
+      <button type="button">Search</button>  // ❌ NEVER use button in molecules
     </div>
   );
 };
@@ -48,31 +53,31 @@ export const SearchBar = () => {
 
 **✅ CORRECT - Using atoms:**
 ```tsx
-// app/components/atoms/Box.tsx
+// app/ui/atoms/Box/Box.tsx
 export const Box = ({ children }: { children: React.ReactNode }) => {
   return <div>{children}</div>;  // ✅ HTML element in atom
 };
 
-// app/components/atoms/Input.tsx
+// app/ui/atoms/Input/Input.tsx
 export const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
   return <input {...props} />;  // ✅ HTML element in atom
 };
 
-// app/components/atoms/Button.tsx
+// app/ui/atoms/Button/Button.tsx
 export const Button = ({ children }: { children: React.ReactNode }) => {
-  return <button>{children}</button>;  // ✅ HTML element in atom
+  return <button type="button">{children}</button>;  // ✅ HTML element in atom
 };
 
-// app/components/molecules/SearchBar.tsx
-import { Box } from "../atoms/Box";
-import { Input } from "../atoms/Input";
-import { Button } from "../atoms/Button";
+// app/ui/molecules/SearchBar/SearchBar.tsx
+import { Box } from "@app/ui/atoms/Box/Box";
+import { Input } from "@app/ui/atoms/Input/Input";
+import { Button } from "@app/ui/atoms/Button/Button";
 
 export const SearchBar = () => {
   return (
-    <Box>  // ✅ Using atom
-      <Input type="text" />  // ✅ Using atom
-      <Button>Search</Button>  // ✅ Using atom
+    <Box>
+      <Input type="text" />
+      <Button>Search</Button>
     </Box>
   );
 };
@@ -86,11 +91,10 @@ export const SearchBar = () => {
 ## Verification Commands
 ```bash
 # Check for HTML elements in molecules (should return nothing)
-grep -r "<div\|<span\|<input\|<button\|<p\|<h[1-6]" app/components/molecules/ --include="*.tsx"
+grep -rE "<div|<span|<input|<button|<p|<h[1-6]" app/ui/molecules/ --include="*.tsx"
 
-# Check for HTML elements in organisms (should return nothing)
-grep -r "<div\|<span\|<input\|<button\|<p\|<h[1-6]" app/components/organisms/ --include="*.tsx"
+# When you add organisms, point grep at app/ui/organisms/ similarly
 
 # Check atoms (should find HTML elements)
-grep -r "<div\|<span\|<input\|<button\|<p\|<h[1-6]" app/components/atoms/ --include="*.tsx"
+grep -rE "<div|<span|<input|<button|<p|<h[1-6]" app/ui/atoms/ --include="*.tsx"
 ```

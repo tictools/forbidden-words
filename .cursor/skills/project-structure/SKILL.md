@@ -5,6 +5,7 @@ description: Project structure for app/core/tests; entity-first domain layout un
 
 # Project structure
 
+- Path aliases for imports: `@app/*`, `@core/*`, `@tests/*` (`tsconfig.json`). See **`.cursor/skills/create-react-component/SKILL.md`** for UI/hook folder layout.
 - Use `/app` for UI (React components, routes/pages, UI hooks).
 - **Component-specific hooks** live under the owning component: `app/.../ComponentName/useSomething/useSomething.ts` (see `create-react-component` for the full pattern). **Domain** behavior and types stay under `/core`, not in UI hook folders.
 - Use `/core` for domain logic (entities, domain services, pure logic).
@@ -72,3 +73,9 @@ core/
 - Keep domain logic out of `/app`; UI orchestrates, domain decides.
 - **Screaming architecture**: folder names under `/core` reflect domain language (`Game`, `Severity`), not technical layers only.
 - Mirror domain structure under `tests/core/<DomainEntity>/...` **for mothers, builders, and shared fakes/mocks only** (not for domain spec files—those stay under `core/<Entity>/logic/__tests__/` or next to the tested file per rules above).
+
+## See also
+
+- **`.cursor/skills/tests-mothers-and-mocks/SKILL.md`** — what may live under `/tests` vs colocated specs.
+- **`.cursor/skills/typescript/SKILL.md`** — `/core` types vs constants and exported `XxxParams` (with base TS patterns in **`.cursor/rules/typescript.mdc`**).
+- **`.cursor/specs/`** — product and technical specs when behavior is specified there.
