@@ -1,6 +1,20 @@
 @import 'tailwindcss';
 
 @theme {
+  /* Readable system stack (Phase A typography tokens; utilities: font-sans, text-title, …) */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.25;
+  --text-subtitle: 1.0625rem;
+  --text-subtitle--line-height: 1.35;
+  --text-body: 1rem;
+  --text-body--line-height: 1.55;
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.4;
+
   /* Page canvas — mid warm gray (less glare / eye fatigue than light stone-100) */
   --color-page: #d4d0cb;
 
@@ -19,15 +33,22 @@
   /* Accent — muted teal (lower chroma than default teal-600) */
   --color-accent: #0f766e;
   --color-accent-hover: #115e59;
+  --color-accent-foreground: #ffffff;
   --color-ring-focus: #0d9488;
+
+  /* Error meter fills (WCAG 1.4.11 ≥3:1 vs progress-track; see comment on --color-progress-track) */
+  --color-success: #047857;
+  --color-warning: #b45309;
+  --color-caution: #c2410c;
+  --color-critical: #b91c1c;
 
   /* Secondary / option chips — blend with card */
   --color-chip-bg: #e8e5e0;
   --color-chip-border: #b8b2aa;
   --color-chip-hover: #dce8e6;
 
-  /* Progress bar track on card */
-  --color-progress-track: #c9c4be;
+  /* Progress bar track — slightly lighter than border-subtle so fills meet ≥3:1 vs track */
+  --color-progress-track: #d6d1ca;
 
   /* Card feedback (forbidden word / error highlight) — softer amber */
   --color-warning-bg: #f0e4d4;
@@ -42,6 +63,7 @@
 
 @layer base {
   html {
+    font-family: var(--font-sans);
     font-size: clamp(1.0625rem, 0.5vw + 0.95rem, 1.375rem);
     line-height: 1.55;
   }
