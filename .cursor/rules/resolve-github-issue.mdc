@@ -1,0 +1,38 @@
+---
+description: GitHub issue resolution workflow—verify issue, draft plan with branch, user review, then execute
+globs: app/**/*.{ts,tsx},core/**/*.{ts,tsx},tests/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Resolve GitHub issue (workflow)
+
+Use this workflow when the user asks to **resolve**, **implement**, or **fix** a GitHub issue by **number** or **title** for this repository. OpenCode users can run the same flow with `/resolve-issue` (see `.opencode/commands/resolve-issue.md`).
+
+## 1. Verify the issue exists
+
+- Require GitHub CLI (`gh`) and `origin` pointing at GitHub.
+- **Numeric argument**: `gh issue view <n> --json number,title,body,state,url`. On failure, **stop** with a clear warning that the issue was not found; suggest checking the number and remote.
+- **Non-numeric argument**: `gh issue list` / `--search`; show candidates. **Zero matches** → warn and stop. **Multiple matches** → ask the user to pick a number. **One clear match** → proceed with that issue.
+
+## 2. Plan (include branch creation)
+
+Consider the issue **already planned** if the body (or recent comments) has concrete steps, acceptance criteria, or a checklist that defines scope.
+
+Otherwise **draft a plan** that includes:
+
+- summary, ordered steps, and testing (TDD for domain or non-trivial logic—see `.cursor/skills/tdd/SKILL.md`);
+- **branch**: from the default branch (`gh repo view --json defaultBranchRef`), name `issue-<number>-<short-kebab-slug>` from the title.
+
+## 3. User review (mandatory gate)
+
+Present the plan clearly. **Do not** create branches, implement code, or run **`git commit`** until the user **explicitly approves** the plan or provides a revised approved plan.
+
+## 4. Execute after approval
+
+Create the branch and implement per the approved plan (stay within reviewed scope).
+
+**Commits:** **Never** auto-commit. When changes are ready, propose commit message(s) referencing the issue (`Fixes #N`, `Closes #N`, or `Refs #N` as appropriate) and **wait for explicit user instruction** before running `git commit`. If the user commits locally themselves, do not run `git commit`.
+
+**Push / PR:** Run `git push` or `gh pr create` **only** when the user **explicitly** asks.
+
+If blocked (CI, permissions, ambiguity), report and propose next steps—do not assume merge.

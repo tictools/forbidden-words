@@ -28,6 +28,7 @@ Defined in [`.opencode/commands/`](.opencode/commands):
 | `/domain` | [domain.md](.opencode/commands/domain.md) | `/core` structure + TypeScript skill + rule |
 | `/ui-review` | [ui-review.md](.opencode/commands/ui-review.md) | Atomic Design rule + visual-guard skill |
 | `/remote-issue` | [remote-issue.md](.opencode/commands/remote-issue.md) | GitHub issues from findings + `type/*` labels |
+| `/resolve-issue` | [resolve-issue.md](.opencode/commands/resolve-issue.md) | Resolve a GitHub issue (number or title): verify, plan, user review, execute |
 
 ## Skills (workflows & architecture)
 
@@ -52,6 +53,7 @@ Defined in [`.opencode/commands/`](.opencode/commands):
 | React component conventions | [.cursor/rules/create-react-component.mdc](.cursor/rules/create-react-component.mdc) |
 | Atomic Design (strict HTML in atoms) | [.cursor/rules/atomic-design-ui.mdc](.cursor/rules/atomic-design-ui.mdc) |
 | Vercel performance checklist | [.cursor/rules/vercel-react-best-practices.mdc](.cursor/rules/vercel-react-best-practices.mdc) |
+| GitHub issue resolution (plan + review gate) | [.cursor/rules/resolve-github-issue.mdc](.cursor/rules/resolve-github-issue.mdc) |
 
 ## Specs
 
