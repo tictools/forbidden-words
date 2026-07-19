@@ -11,7 +11,7 @@ I want to create a web application with the following technical requirements
 
 ## ALIGNMENT WITH PRODUCT SPECS
 
-Behavioral rules (bars, pending words, end game, confetti, exit flow, accessibility, Catalan-only UI, speech required) are defined in `.cursor/specs/product/SPECS_v1.md`. The domain model and implementation below must satisfy that document.
+Behavioral rules (bars, pending words, end game, confetti, exit flow, accessibility, Catalan-only UI, speech required) are defined in `specs/product/SPECS_v1.md`. The domain model and implementation below must satisfy that document.
 
 ### Error bar color (`errorSeverity`)
 

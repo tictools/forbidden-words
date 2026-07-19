@@ -1,0 +1,1 @@
+../../../.cursor/skills/project-structure/SKILL.md

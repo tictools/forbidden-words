@@ -78,4 +78,4 @@ core/
 
 - **`.cursor/skills/tests-mothers-and-mocks/SKILL.md`** — what may live under `/tests` vs colocated specs.
 - **`.cursor/skills/typescript/SKILL.md`** — `/core` types vs constants and exported `XxxParams` (with base TS patterns in **`.cursor/rules/typescript.mdc`**).
-- **`.cursor/specs/`** — product and technical specs when behavior is specified there.
+- **`/specs`** — product and technical specs when behavior is specified there.

@@ -74,7 +74,7 @@ Do not invent ad-hoc labels outside `type/*` and `area/*` unless the user suppli
 ```
 
 - **`type/bug`**: include **reproduction** (commands or steps) and **expected vs actual**.
-- **`type/feature`**: include **acceptance criteria** tied to specs when available (`.cursor/specs/`).
+- **`type/feature`**: include **acceptance criteria** tied to specs when available (`/specs`).
 
 ## Workflow
 

@@ -1,0 +1,1 @@
+../../../.cursor/skills/remote-issue-from-findings/SKILL.md
